@@ -1,24 +1,38 @@
 {
-  // 站点配置：名称、标题、说明和作者。
   "site": {
     "name": "Hooleeas",
     "title": "Hooleeas Blog",
     "description": "Notes on building, thinking, and keeping the internet a little simpler.",
     "author": "Hooleeas",
-    // 默认以最早一篇公开文章日期作为建站天数起算日；有实际上线日期时可更新此值。
     "establishedAt": "2026-10-06"
   },
-
-  // “文A”语言选择器显示的语言；新增文章语言时，在此数组中添加对应代码和显示名称。
   "languages": [
-    {"code": "zh-Hans", "label": "简体中文", "enabled": true},
-    {"code": "en", "label": "English", "enabled": true},
-    {"code": "ja", "label": "日本語", "enabled": true},
-    {"code": "ko", "label": "한국어", "enabled": true},
-    {"code": "zh-Hant", "label": "繁體中文", "enabled": true}
+    {
+      "code": "zh-Hans",
+      "label": "简体中文",
+      "enabled": true
+    },
+    {
+      "code": "en",
+      "label": "English",
+      "enabled": true
+    },
+    {
+      "code": "ja",
+      "label": "日本語",
+      "enabled": true
+    },
+    {
+      "code": "ko",
+      "label": "한국어",
+      "enabled": true
+    },
+    {
+      "code": "zh-Hant",
+      "label": "繁體中文",
+      "enabled": true
+    }
   ],
-
-  // 顶部导航：href 是页面地址，label 是各语言显示文字，key 对应语言切换键。
   "navigation": {
     "homeLabel": {
       "zh-Hans": "主页",
@@ -28,14 +42,52 @@
       "en": "Home"
     },
     "items": [
-      {"href": "/archive", "key": "archive", "label": {"zh-Hans": "文章归档", "zh-Hant": "文章歸檔", "ja": "アーカイブ", "ko": "아카이브", "en": "Archive"}},
-      {"href": "/notes", "key": "notes", "label": {"zh-Hans": "随记", "zh-Hant": "隨記", "ja": "日々のメモ", "ko": "짧은 메모", "en": "Notes"}},
-      {"href": "/charity", "key": "services", "label": {"zh-Hans": "公益服务", "zh-Hant": "公益服務", "ja": "サービス", "ko": "서비스", "en": "Charity"}},
-      {"href": "/about", "key": "about", "label": {"zh-Hans": "关于", "zh-Hant": "關於", "ja": "このサイトについて", "ko": "소개", "en": "About"}}
+      {
+        "href": "/archive",
+        "key": "archive",
+        "label": {
+          "zh-Hans": "文章归档",
+          "zh-Hant": "文章歸檔",
+          "ja": "アーカイブ",
+          "ko": "아카이브",
+          "en": "Archive"
+        }
+      },
+      {
+        "href": "/notes",
+        "key": "notes",
+        "label": {
+          "zh-Hans": "随记",
+          "zh-Hant": "隨記",
+          "ja": "日々のメモ",
+          "ko": "짧은 메모",
+          "en": "Notes"
+        }
+      },
+      {
+        "href": "/charity",
+        "key": "services",
+        "label": {
+          "zh-Hans": "公益服务",
+          "zh-Hant": "公益服務",
+          "ja": "サービス",
+          "ko": "서비스",
+          "en": "Charity"
+        }
+      },
+      {
+        "href": "/about",
+        "key": "about",
+        "label": {
+          "zh-Hans": "关于",
+          "zh-Hant": "關於",
+          "ja": "このサイトについて",
+          "ko": "소개",
+          "en": "About"
+        }
+      }
     ]
   },
-
-  // Titles and subtitles displayed at the top of content pages.
   "pages": {
     "archive": {
       "pageTitle": {
@@ -70,16 +122,10 @@
       }
     }
   },
-
-  // 首页内容按页面上看到的卡片分组。
   "home": {
-
-    // 首页技术 Logo 轮播。
     "creativity": {
-      // visible 控制所有设备显示；showOnMobile 控制窄屏显示，需 visible 同时为 true。
-      "visible": false,
-      "showOnMobile": false,
-      // 首页技术轮播卡片底部 Learn more 长链接的跳转地址；留空时不显示链接。
+      "visible": true,
+      "showOnMobile": true,
       "url": "/apple",
       "title": {
         "zh-Hans": "Apple 订阅",
@@ -95,33 +141,125 @@
         "ko": "사이트 운영자가 제공하는 합리적인 Apple 구독 공유 서비스",
         "en": "Affordable Apple subscription sharing services offered by the site owner"
       },
-      // 轮播方向："diagonal" 为斜向滚动，"marquee" 为横向滚动。
       "carouselMode": "diagonal",
       "items": [
-        {"name": "Java", "color": "#fff", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/26ba17ce013ecde9afc8b373e2fc0b9d_1804318147854602575.jpg", "href": ""},
-        {"name": "Docker", "color": "#57b6e6", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/544b2d982fd5c4ede6630b29d86f3cae_7350393908531420887.png", "href": ""},
-        {"name": "Photoshop", "color": "#4082c3", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/4ce1d081b9b37b06e3714bee95e58589_1613929877388832041.png", "href": ""},
-        {"name": "Node", "color": "#333", "labelColor": "#fff", "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.1.1/img/svg/node-logo.svg", "href": ""},
-        {"name": "Webpack", "color": "#2e3a41", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/32dc115fbfd1340f919f0234725c6fb4_4060605986539473613.png", "href": ""},
-        {"name": "Pinia", "color": "#fff", "labelColor": "#17191c", "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.0.8/img/svg/pinia-logo.svg", "href": ""},
-        {"name": "Python", "color": "#fff", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/02c9c621414cc2ca41035d809a4154be_7912546659792951301.png", "href": ""},
-        {"name": "Vite", "color": "#937df7", "labelColor": "#17191c", "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.0.8/img/svg/vite-logo.svg", "href": ""},
-        {"name": "Flutter", "color": "#4499e4", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/b5aa93e0b61d8c9784cf76d14886ea46_4590392178423108088.png", "href": ""},
-        {"name": "Vue", "color": "#b8f0ae", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/cf23526f451784ff137f161b8fe18d5a_692393069314581413.png", "href": ""},
-        {"name": "React", "color": "#222", "labelColor": "#fff", "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K", "href": ""},
-        {"name": "CSS3", "color": "#2c51db", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/948767d87de7c5733b5f59b036d28b4b_3573026798828830876.png", "href": ""},
-        {"name": "JS", "color": "#f7cb4f", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/06216e7fddb6704b57cb89be309443f9_7269407781142156006.png", "href": ""},
-        {"name": "HTML", "color": "#e9572b", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/f774c401c8bc2707e1df1323bdc9e423_1926035231499717029.png", "href": ""},
-        {"name": "Git", "color": "#df5b40", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/fcc0dbbfe206b4436097a8362d64b558_6981541002497327189.webp", "href": ""},
-        {"name": "Apifox", "color": "#e65164", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/b61bc7287d7f7f89bd30079c7f04360e_2465770520170903938.png", "href": ""}
+        {
+          "name": "Java",
+          "color": "#fff",
+          "labelColor": "#17191c",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/26ba17ce013ecde9afc8b373e2fc0b9d_1804318147854602575.jpg",
+          "href": ""
+        },
+        {
+          "name": "Docker",
+          "color": "#57b6e6",
+          "labelColor": "#17191c",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/544b2d982fd5c4ede6630b29d86f3cae_7350393908531420887.png",
+          "href": ""
+        },
+        {
+          "name": "Photoshop",
+          "color": "#4082c3",
+          "labelColor": "#17191c",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/4ce1d081b9b37b06e3714bee95e58589_1613929877388832041.png",
+          "href": ""
+        },
+        {
+          "name": "Node",
+          "color": "#333",
+          "labelColor": "#fff",
+          "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.1.1/img/svg/node-logo.svg",
+          "href": ""
+        },
+        {
+          "name": "Webpack",
+          "color": "#2e3a41",
+          "labelColor": "#fff",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/32dc115fbfd1340f919f0234725c6fb4_4060605986539473613.png",
+          "href": ""
+        },
+        {
+          "name": "Pinia",
+          "color": "#fff",
+          "labelColor": "#17191c",
+          "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.0.8/img/svg/pinia-logo.svg",
+          "href": ""
+        },
+        {
+          "name": "Python",
+          "color": "#fff",
+          "labelColor": "#17191c",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/02c9c621414cc2ca41035d809a4154be_7912546659792951301.png",
+          "href": ""
+        },
+        {
+          "name": "Vite",
+          "color": "#937df7",
+          "labelColor": "#17191c",
+          "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.0.8/img/svg/vite-logo.svg",
+          "href": ""
+        },
+        {
+          "name": "Flutter",
+          "color": "#4499e4",
+          "labelColor": "#17191c",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/b5aa93e0b61d8c9784cf76d14886ea46_4590392178423108088.png",
+          "href": ""
+        },
+        {
+          "name": "Vue",
+          "color": "#b8f0ae",
+          "labelColor": "#17191c",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/cf23526f451784ff137f161b8fe18d5a_692393069314581413.png",
+          "href": ""
+        },
+        {
+          "name": "React",
+          "color": "#222",
+          "labelColor": "#fff",
+          "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K",
+          "href": ""
+        },
+        {
+          "name": "CSS3",
+          "color": "#2c51db",
+          "labelColor": "#fff",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/948767d87de7c5733b5f59b036d28b4b_3573026798828830876.png",
+          "href": ""
+        },
+        {
+          "name": "JS",
+          "color": "#f7cb4f",
+          "labelColor": "#17191c",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/06216e7fddb6704b57cb89be309443f9_7269407781142156006.png",
+          "href": ""
+        },
+        {
+          "name": "HTML",
+          "color": "#e9572b",
+          "labelColor": "#fff",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/f774c401c8bc2707e1df1323bdc9e423_1926035231499717029.png",
+          "href": ""
+        },
+        {
+          "name": "Git",
+          "color": "#df5b40",
+          "labelColor": "#fff",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/fcc0dbbfe206b4436097a8362d64b558_6981541002497327189.webp",
+          "href": ""
+        },
+        {
+          "name": "Apifox",
+          "color": "#e65164",
+          "labelColor": "#fff",
+          "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/b61bc7287d7f7f89bd30079c7f04360e_2465770520170903938.png",
+          "href": ""
+        }
       ]
     },
-
-    // YouTube 展示卡片内容；图片路径相对 public/，url 是点击跳转地址，留空时不启用链接；backgroundImage 留空时使用默认渐变背景。
     "feature": {
-      // visible 控制所有设备显示；showOnMobile 控制窄屏显示，需 visible 同时为 true。
-      "visible": false,
-      "showOnMobile": false,
+      "visible": true,
+      "showOnMobile": true,
       "backgroundImage": "",
       "playLogoImage": "/images/icon_youtube.webp",
       "url": "https://youtube.com",
@@ -134,12 +272,9 @@
         "en": "Explore technology and creative possibilities"
       }
     },
-
-    // 个人资料卡：头像图片可用外部网址或项目内路径；链接 href 可填外部网址或站内路径，icon 可填外部图片网址或项目内路径。
     "profile": {
-      // visible 控制所有设备显示；showOnMobile 控制窄屏显示，需 visible 同时为 true。
-      "visible": false,
-      "showOnMobile": false,
+      "visible": true,
+      "showOnMobile": true,
       "avatarImage": "/images/avatar.webp",
       "name": "Hooleeas",
       "description": {
@@ -152,8 +287,6 @@
       "links": []
     }
   },
-
-  // 通用界面文字，不属于某一张首页卡片。
   "ui": {
     "translations": {
       "zh-Hans": {
@@ -164,7 +297,6 @@
         "grid": "网格",
         "learnMore": "了解详细"
       },
-
       "zh-Hant": {
         "all": "全部",
         "thisMonth": "本月發布",
@@ -173,7 +305,6 @@
         "grid": "網格",
         "learnMore": "了解詳情"
       },
-
       "ja": {
         "all": "すべて",
         "thisMonth": "今月の記事",
@@ -182,7 +313,6 @@
         "grid": "グリッド",
         "learnMore": "詳しく見る"
       },
-
       "ko": {
         "all": "전체",
         "thisMonth": "이번 달",
@@ -191,7 +321,6 @@
         "grid": "그리드",
         "learnMore": "자세히 보기"
       },
-
       "en": {
         "all": "All",
         "thisMonth": "This month",
