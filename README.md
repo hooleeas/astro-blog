@@ -102,20 +102,11 @@ Run `astro new page tags` to create `src/pages/tags.astro` from the page templat
 
 The site builds to `dist/`. This project is configured for the root domain `https://hooleeas.github.io`, so it uses `/` as its base path.
 
-### Cloudflare Pages: build this demo repository
+### Cloudflare Pages
 
-1. In Cloudflare, go to **Workers & Pages → Create application → Pages → Connect to Git**.
-2. Connect GitHub and select the public `hooleeas/astro-blog` repository and the `main` branch.
-3. Set the framework preset to **Astro**, the build command to `npm run build`, and the build output directory to `dist`. Leave the root directory blank.
-4. Select **Save and Deploy**. Later pushes to the selected branch trigger automatic builds and deployments.
+Choose one deployment method:
 
-This repository is the public demo source. The separate `hooleeas/hooleeas.github.io` repository is reserved for the owner's personal site and is not modified by this demo.
+- **Automatic:** In Cloudflare, select **Workers & Pages → Create application → Pages → Connect to Git**. Choose `hooleeas/astro-blog` and `main`, then set **Framework: Astro**, **Build command: `npm run build`**, and **Build output directory: `dist`**. Leave the root directory blank and deploy. Future pushes deploy automatically.
+- **Upload `dist/`:** Run `npm run build`, create a Pages project with **Direct Upload**, and upload the `dist/` folder. For updates, build again and upload the new `dist/`.
 
-### Cloudflare Pages: upload only `dist/` (Direct Upload)
-
-1. Run `npm run build` locally.
-2. In the Cloudflare dashboard, go to **Workers & Pages → Create application → Pages → Drag and drop your files**.
-3. Enter a project name, upload the `dist/` folder, and select **Deploy site**.
-4. For updates, rebuild and choose **Create a new deployment** in the Pages project to upload the new `dist/`. Alternatively, deploy with Wrangler: `npx wrangler pages deploy dist`.
-
-Direct Upload does not connect a source repository. A Direct Upload project cannot later be switched to Git integration; create a new project to change deployment methods. With either hosting provider, HTML, CSS, and JavaScript delivered to visitors' browsers can be inspected; publishing only `dist/` does not hide or encrypt frontend code.
+The Git integration and Direct Upload methods are separate; choose one when creating the Pages project.

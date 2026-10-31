@@ -102,20 +102,11 @@ src/content/posts/en/
 
 빌드 결과물은 `dist/`에 생성됩니다. 이 프로젝트는 루트 도메인 `https://hooleeas.github.io`를 사용하므로 `base`가 `/`로 설정되어 있습니다.
 
-### Cloudflare Pages: 이 데모 저장소 빌드
+### Cloudflare Pages
 
-1. Cloudflare 대시보드에서 **Workers & Pages → Create application → Pages → Connect to Git**으로 이동합니다.
-2. GitHub를 연결한 다음 공개된 `hooleeas/astro-blog` 저장소와 `main` 브랜치를 선택합니다.
-3. 프레임워크 프리셋은 **Astro**, 빌드 명령은 `npm run build`, 빌드 출력 디렉터리는 `dist`로 설정합니다. 루트 디렉터리는 비워 둡니다.
-4. **Save and Deploy**를 선택합니다. 이후 선택한 브랜치에 push하면 Cloudflare가 자동으로 빌드하고 배포합니다.
+두 가지 배포 방식 중 하나를 선택하세요.
 
-이 저장소는 공개 데모 소스입니다. 별도의 `hooleeas/hooleeas.github.io` 저장소는 소유자의 개인 사이트용으로 남겨 두며, 이 데모에서 수정하지 않습니다.
+- **자동 배포:** Cloudflare에서 **Workers & Pages → Create application → Pages → Connect to Git**을 선택하고 `hooleeas/astro-blog`의 `main` 브랜치를 연결합니다. **Framework: Astro**, **Build command: `npm run build`**, **Build output directory: `dist`**로 설정하고 루트 디렉터리는 비워 둔 채 배포하세요. 이후 push할 때마다 자동 배포됩니다.
+- **`dist/` 업로드:** `npm run build`를 실행하고 Pages Direct Upload 프로젝트에 `dist/` 폴더를 업로드합니다. 업데이트할 때는 다시 빌드한 다음 새 `dist/`를 업로드하세요.
 
-### Cloudflare Pages: `dist/`만 업로드 (Direct Upload)
-
-1. 로컬에서 `npm run build`를 실행합니다.
-2. Cloudflare 대시보드에서 **Workers & Pages → Create application → Pages → Drag and drop your files**로 이동합니다.
-3. 프로젝트 이름을 입력하고 `dist/` 폴더를 업로드한 뒤 **Deploy site**를 선택합니다.
-4. 업데이트할 때는 다시 빌드하고 Pages 프로젝트에서 **Create a new deployment**를 선택해 새 `dist/`를 업로드합니다. Wrangler를 사용하려면 `npx wrangler pages deploy dist`를 실행합니다.
-
-Direct Upload는 소스 저장소를 연결하지 않으며 나중에 Git 통합으로 전환할 수 없습니다. 전환하려면 새 프로젝트를 만들어야 합니다. 두 호스팅 방식 모두 브라우저에 전달되는 HTML, CSS, JavaScript를 확인할 수 있습니다. `dist/`만 게시해도 프런트엔드 코드가 숨겨지거나 암호화되는 것은 아닙니다.
+Git 통합과 Direct Upload는 별도의 방식이므로 Pages 프로젝트를 만들 때 하나를 선택하세요.

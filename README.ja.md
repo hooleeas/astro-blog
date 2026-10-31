@@ -102,20 +102,11 @@ src/content/posts/en/
 
 ビルド成果物は `dist/` に出力されます。このプロジェクトはルートドメイン `https://hooleeas.github.io` を使うため、`base` は `/` に設定されています。
 
-### Cloudflare Pages：このデモリポジトリをビルド
+### Cloudflare Pages
 
-1. Cloudflare ダッシュボードで **Workers & Pages → Create application → Pages → Connect to Git** を開きます。
-2. GitHub を接続し、公開されている `hooleeas/astro-blog` リポジトリと `main` ブランチを選択します。
-3. フレームワークプリセットを **Astro**、ビルドコマンドを `npm run build`、ビルド出力ディレクトリを `dist` に設定します。ルートディレクトリは空欄にします。
-4. **Save and Deploy** を選択します。以後、選択したブランチへの push 時に Cloudflare が自動でビルド・デプロイします。
+次のどちらかを選びます。
 
-このリポジトリは公開デモ用のソースです。別の `hooleeas/hooleeas.github.io` リポジトリは所有者の個人サイト用に確保されており、このデモから変更されません。
+- **自動デプロイ：**Cloudflare で **Workers & Pages → Create application → Pages → Connect to Git** を選び、`hooleeas/astro-blog` の `main` を接続します。**Framework: Astro**、**Build command: `npm run build`**、**Build output directory: `dist`** を設定し、ルートディレクトリは空欄のままデプロイします。以後、push 時に自動デプロイされます。
+- **`dist/` をアップロード：**`npm run build` を実行し、Pages の Direct Upload プロジェクトに `dist/` フォルダーをアップロードします。更新時は再ビルドして、新しい `dist/` をアップロードします。
 
-### Cloudflare Pages：`dist/` のみをアップロード（Direct Upload）
-
-1. ローカルで `npm run build` を実行します。
-2. Cloudflare ダッシュボードで **Workers & Pages → Create application → Pages → Drag and drop your files** を開きます。
-3. プロジェクト名を入力し、`dist/` フォルダーをアップロードして **Deploy site** を選択します。
-4. 更新時は再ビルドし、Pages プロジェクトの **Create a new deployment** から新しい `dist/` をアップロードします。Wrangler を使う場合は `npx wrangler pages deploy dist` を実行します。
-
-Direct Upload はソースリポジトリを接続せず、後から Git 連携に切り替えることもできません。切り替える場合は新しいプロジェクトを作成してください。どちらのホスティングでも、ブラウザーに配信される HTML、CSS、JavaScript は閲覧できます。`dist/` だけを公開しても、フロントエンドコードが隠されたり暗号化されたりするわけではありません。
+Git 連携と Direct Upload は別の方式です。Pages プロジェクト作成時にどちらかを選んでください。

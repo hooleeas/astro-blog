@@ -102,20 +102,11 @@ src/content/posts/en/
 
 网站构建产物位于 `dist/`。本项目使用根域名 `https://hooleeas.github.io`，因此 `base` 为 `/`。
 
-### Cloudflare Pages：构建此演示仓库
+### Cloudflare Pages
 
-1. 在 Cloudflare 控制台进入 **Workers & Pages → Create application → Pages → Connect to Git**。
-2. 连接 GitHub，选择公开的 `hooleeas/astro-blog` 仓库和 `main` 分支。
-3. 框架预设选择 **Astro**，构建命令填写 `npm run build`，构建输出目录填写 `dist`，根目录留空。
-4. 点击 **Save and Deploy**。之后推送到所选分支时，Cloudflare 会自动构建并部署。
+选择一种部署方式：
 
-此仓库是公开的演示源码。独立的 `hooleeas/hooleeas.github.io` 仓库留作站点所有者的个人网站，不会被此演示项目修改。
+- **自动部署：**在 Cloudflare 选择 **Workers & Pages → Create application → Pages → Connect to Git**，连接 `hooleeas/astro-blog` 的 `main` 分支。设置 **框架：Astro**、**构建命令：`npm run build`**、**构建输出目录：`dist`**，根目录留空，然后部署。之后推送代码会自动部署。
+- **上传 `dist/`：**运行 `npm run build`，创建 Pages Direct Upload 项目并上传 `dist/` 文件夹。更新时重新构建，再上传新的 `dist/`。
 
-### Cloudflare Pages：只上传 `dist/`（Direct Upload）
-
-1. 在本地运行 `npm run build`。
-2. 在 Cloudflare 控制台进入 **Workers & Pages → Create application → Pages → Drag and drop your files**。
-3. 输入项目名称，上传 `dist/` 文件夹，然后点击 **Deploy site**。
-4. 更新时重新构建，并在 Pages 项目中选择 **Create a new deployment** 上传新的 `dist/`。也可以使用 Wrangler：`npx wrangler pages deploy dist`。
-
-Direct Upload 不会连接源码仓库，且之后不能切换为 Git 集成；如果要更换部署方式，需要新建项目。无论使用哪家平台，浏览器收到的 HTML、CSS 和 JavaScript 都可以查看；只发布 `dist/` 并不等于隐藏或加密前端代码。
+Git 集成和 Direct Upload 是两种独立方式，创建 Pages 项目时选择其一。

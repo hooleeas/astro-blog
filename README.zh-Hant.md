@@ -102,20 +102,11 @@ src/content/posts/en/
 
 網站建置產物位於 `dist/`。本專案使用根網域 `https://hooleeas.github.io`，因此 `base` 設為 `/`。
 
-### Cloudflare Pages：建置此示範儲存庫
+### Cloudflare Pages
 
-1. 在 Cloudflare 控制台前往 **Workers & Pages → Create application → Pages → Connect to Git**。
-2. 連結 GitHub，選擇公開的 `hooleeas/astro-blog` 儲存庫與 `main` 分支。
-3. 框架預設選擇 **Astro**，建置指令填入 `npm run build`，建置輸出目錄填入 `dist`，根目錄留白。
-4. 按下 **Save and Deploy**。之後推送至所選分支時，Cloudflare 會自動建置並部署。
+選擇一種部署方式：
 
-此儲存庫是公開的示範原始碼。獨立的 `hooleeas/hooleeas.github.io` 儲存庫保留給站點擁有者的個人網站使用，不會由此示範專案修改。
+- **自動部署：**在 Cloudflare 選擇 **Workers & Pages → Create application → Pages → Connect to Git**，連結 `hooleeas/astro-blog` 的 `main` 分支。設定 **框架：Astro**、**建置指令：`npm run build`**、**建置輸出目錄：`dist`**，根目錄留白後部署。之後推送程式碼會自動部署。
+- **上傳 `dist/`：**執行 `npm run build`，建立 Pages Direct Upload 專案並上傳 `dist/` 資料夾。更新時重新建置，再上傳新的 `dist/`。
 
-### Cloudflare Pages：只上傳 `dist/`（Direct Upload）
-
-1. 在本機執行 `npm run build`。
-2. 在 Cloudflare 控制台前往 **Workers & Pages → Create application → Pages → Drag and drop your files**。
-3. 輸入專案名稱，上傳 `dist/` 資料夾，再按下 **Deploy site**。
-4. 更新時重新建置，並在 Pages 專案中選擇 **Create a new deployment** 上傳新的 `dist/`。也可以使用 Wrangler：`npx wrangler pages deploy dist`。
-
-Direct Upload 不會連結原始碼儲存庫，且之後無法切換為 Git 整合；若要更換部署方式，必須建立新專案。無論使用哪個平台，瀏覽器收到的 HTML、CSS 與 JavaScript 都可以檢視；只發布 `dist/` 並不代表前端程式碼已隱藏或加密。
+Git 整合與 Direct Upload 是兩種獨立方式，建立 Pages 專案時擇一即可。
