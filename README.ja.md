@@ -102,11 +102,38 @@ src/content/posts/en/
 
 ビルド成果物は `dist/` に出力されます。このプロジェクトはルートドメイン `https://hooleeas.github.io` を使うため、`base` は `/` に設定されています。
 
+### GitHub へのワンコマンド push
+
+プロジェクトのディレクトリで次のいずれかを実行します。コミットメッセージは省略できます。
+
+| push 対象 | コマンド | 動作 |
+| --- | --- | --- |
+| 現在の `origin` リポジトリにソースを push | `npm run push:source -- "Update blog source"` | 変更をステージしてコミットし、現在のブランチを push |
+| `hooleeas.github.io` にビルド成果物を push | `npm run push:pages -- "Update website"` | ビルド後、Pages リポジトリの内容を `dist/` で置き換えて `main` に push |
+
+ビルド成果物の push には `hooleeas/hooleeas.github.io` への書き込み権限と GitHub SSH 認証が必要です。2 つ目のコマンドはリポジトリ内のサイトファイルを置き換えるため、このサイト専用のリポジトリでのみ使用してください。
+
 ### Cloudflare Pages
 
-次のどちらかを選びます。
+#### Git リポジトリからデプロイ
 
-- **自動デプロイ：**Cloudflare で **Workers & Pages → Create application → Pages → Connect to Git** を選び、`hooleeas/astro-blog` の `main` を接続します。**Framework: Astro**、**Build command: `npm run build`**、**Build output directory: `dist`** を設定し、ルートディレクトリは空欄のままデプロイします。以後、push 時に自動デプロイされます。
-- **`dist/` をアップロード：**`npm run build` を実行し、Pages の Direct Upload プロジェクトに `dist/` フォルダーをアップロードします。更新時は再ビルドして、新しい `dist/` をアップロードします。
+Cloudflare で次の順に操作します。
 
-Git 連携と Direct Upload は別の方式です。Pages プロジェクト作成時にどちらかを選んでください。
+```text
+Compute
+  → Workers & Pages
+  → Create application
+  → Continue to Pages
+  → Import an existing Git repository
+  → Select a forked project
+  → Begin setup
+```
+
+デプロイするリポジトリとブランチを選択します（本プロジェクトでは `hooleeas/astro-blog` の `main`）。リポジトリの内容に応じてビルド設定を行います。
+
+| リポジトリの内容 | Build command | Build output directory | Root directory |
+| --- | --- | --- | --- |
+| Astro のソースコード（本プロジェクトなど） | `npm run build` | `dist` | 空欄 |
+| ビルド済みの静的ファイル（ルートに `index.html` などがある） | 空欄 | 空欄 | 空欄 |
+
+**Save and Deploy** をクリックします。ソースコードのリポジトリを接続した場合、以後 push ごとに自動でビルド・デプロイされます。ビルド済み静的ファイルのリポジトリでは、Build command と Build output directory を空欄にします。

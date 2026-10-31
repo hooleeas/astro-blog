@@ -102,11 +102,38 @@ src/content/posts/en/
 
 网站构建产物位于 `dist/`。本项目使用根域名 `https://hooleeas.github.io`，因此 `base` 为 `/`。
 
+### 一键推送到 GitHub
+
+在项目目录运行以下命令；提交说明可自定义，不填写时会使用默认说明：
+
+| 推送内容 | 命令 | 操作 |
+| --- | --- | --- |
+| 源码到当前 `origin` 仓库 | `npm run push:source -- "更新博客源码"` | 暂存并提交项目变更，然后推送当前分支 |
+| 构建产物到 `hooleeas.github.io` | `npm run push:pages -- "更新网站"` | 先构建，再用 `dist/` 替换 Pages 仓库内容并推送到 `main` |
+
+推送构建产物需要对 `hooleeas/hooleeas.github.io` 有写入权限，并已配置 GitHub SSH 认证。第二条命令会替换目标仓库中的网站文件，请确认该仓库专用于此站点。
+
 ### Cloudflare Pages
 
-选择一种部署方式：
+#### 连接 Git 仓库部署
 
-- **自动部署：**在 Cloudflare 选择 **Workers & Pages → Create application → Pages → Connect to Git**，连接 `hooleeas/astro-blog` 的 `main` 分支。设置 **框架：Astro**、**构建命令：`npm run build`**、**构建输出目录：`dist`**，根目录留空，然后部署。之后推送代码会自动部署。
-- **上传 `dist/`：**运行 `npm run build`，创建 Pages Direct Upload 项目并上传 `dist/` 文件夹。更新时重新构建，再上传新的 `dist/`。
+在 Cloudflare 中按以下路径操作：
 
-Git 集成和 Direct Upload 是两种独立方式，创建 Pages 项目时选择其一。
+```text
+计算
+  → Workers 和 Pages
+  → 创建应用程序
+  → 继续前往 Pages
+  → 导入现有 Git 存储库
+  → 选择 Fork 的项目
+  → 开始设置
+```
+
+选择要部署的仓库和分支（本项目为 `hooleeas/astro-blog` 的 `main`），然后按仓库内容填写构建设置：
+
+| 仓库内容 | 构建命令 | 构建输出目录 | 根目录 |
+| --- | --- | --- | --- |
+| Astro 源代码（如本项目） | `npm run build` | `dist` | 留空 |
+| 已构建的静态文件（仓库根目录已有 `index.html` 等文件） | 留空 | 留空 | 留空 |
+
+点击 **保存并部署**。连接的是源码仓库时，之后每次推送都会自动重新构建和部署；如果仓库里已经是构建好的静态文件，就不需要填写构建命令和输出目录。

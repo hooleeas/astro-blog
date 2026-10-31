@@ -102,11 +102,38 @@ src/content/posts/en/
 
 網站建置產物位於 `dist/`。本專案使用根網域 `https://hooleeas.github.io`，因此 `base` 設為 `/`。
 
+### 一鍵推送到 GitHub
+
+在專案目錄執行以下指令；提交說明可自訂，不填時會使用預設說明：
+
+| 推送內容 | 指令 | 操作 |
+| --- | --- | --- |
+| 原始碼到目前的 `origin` 儲存庫 | `npm run push:source -- "更新部落格原始碼"` | 暫存並提交專案變更，再推送目前分支 |
+| 建置產物到 `hooleeas.github.io` | `npm run push:pages -- "更新網站"` | 先建置，再以 `dist/` 取代 Pages 儲存庫內容並推送到 `main` |
+
+推送建置產物需要有 `hooleeas/hooleeas.github.io` 的寫入權限，並已設定 GitHub SSH 驗證。第二個指令會取代目標儲存庫中的網站檔案，請確認該儲存庫專用於此網站。
+
 ### Cloudflare Pages
 
-選擇一種部署方式：
+#### 連接 Git 儲存庫部署
 
-- **自動部署：**在 Cloudflare 選擇 **Workers & Pages → Create application → Pages → Connect to Git**，連結 `hooleeas/astro-blog` 的 `main` 分支。設定 **框架：Astro**、**建置指令：`npm run build`**、**建置輸出目錄：`dist`**，根目錄留白後部署。之後推送程式碼會自動部署。
-- **上傳 `dist/`：**執行 `npm run build`，建立 Pages Direct Upload 專案並上傳 `dist/` 資料夾。更新時重新建置，再上傳新的 `dist/`。
+在 Cloudflare 中依照以下路徑操作：
 
-Git 整合與 Direct Upload 是兩種獨立方式，建立 Pages 專案時擇一即可。
+```text
+計算
+  → Workers 和 Pages
+  → 建立應用程式
+  → 繼續前往 Pages
+  → 匯入現有 Git 儲存庫
+  → 選擇 Fork 的專案
+  → 開始設定
+```
+
+選擇要部署的儲存庫和分支（本專案為 `hooleeas/astro-blog` 的 `main`），再依儲存庫內容設定建置選項：
+
+| 儲存庫內容 | 建置指令 | 建置輸出目錄 | 根目錄 |
+| --- | --- | --- | --- |
+| Astro 原始碼（例如本專案） | `npm run build` | `dist` | 留白 |
+| 已建置的靜態檔案（儲存庫根目錄已有 `index.html` 等檔案） | 留白 | 留白 | 留白 |
+
+點擊 **儲存並部署**。連接原始碼儲存庫時，之後每次推送都會自動重新建置和部署；如果儲存庫中已是建置完成的靜態檔案，則不必填寫建置指令和輸出目錄。

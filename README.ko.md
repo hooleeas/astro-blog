@@ -102,11 +102,38 @@ src/content/posts/en/
 
 빌드 결과물은 `dist/`에 생성됩니다. 이 프로젝트는 루트 도메인 `https://hooleeas.github.io`를 사용하므로 `base`가 `/`로 설정되어 있습니다.
 
+### GitHub에 한 번에 푸시하기
+
+프로젝트 디렉터리에서 다음 명령 중 하나를 실행하세요. 커밋 메시지는 생략할 수 있습니다.
+
+| 푸시 대상 | 명령 | 동작 |
+| --- | --- | --- |
+| 현재 `origin` 저장소에 소스 코드 | `npm run push:source -- "Update blog source"` | 변경 사항을 스테이징하고 커밋한 뒤 현재 브랜치를 푸시 |
+| `hooleeas.github.io`에 빌드 결과물 | `npm run push:pages -- "Update website"` | 빌드 후 Pages 저장소 내용을 `dist/`로 교체하고 `main`에 푸시 |
+
+빌드 결과물을 푸시하려면 `hooleeas/hooleeas.github.io` 쓰기 권한과 GitHub SSH 인증이 필요합니다. 두 번째 명령은 해당 저장소의 사이트 파일을 교체하므로 이 사이트 전용 저장소에서만 사용하세요.
+
 ### Cloudflare Pages
 
-두 가지 배포 방식 중 하나를 선택하세요.
+#### Git 저장소에서 배포
 
-- **자동 배포:** Cloudflare에서 **Workers & Pages → Create application → Pages → Connect to Git**을 선택하고 `hooleeas/astro-blog`의 `main` 브랜치를 연결합니다. **Framework: Astro**, **Build command: `npm run build`**, **Build output directory: `dist`**로 설정하고 루트 디렉터리는 비워 둔 채 배포하세요. 이후 push할 때마다 자동 배포됩니다.
-- **`dist/` 업로드:** `npm run build`를 실행하고 Pages Direct Upload 프로젝트에 `dist/` 폴더를 업로드합니다. 업데이트할 때는 다시 빌드한 다음 새 `dist/`를 업로드하세요.
+Cloudflare에서 다음 순서로 진행하세요.
 
-Git 통합과 Direct Upload는 별도의 방식이므로 Pages 프로젝트를 만들 때 하나를 선택하세요.
+```text
+Compute
+  → Workers & Pages
+  → Create application
+  → Continue to Pages
+  → Import an existing Git repository
+  → Select a forked project
+  → Begin setup
+```
+
+배포할 저장소와 브랜치를 선택합니다(이 프로젝트는 `hooleeas/astro-blog`의 `main`). 저장소 내용에 따라 빌드 설정을 입력하세요.
+
+| 저장소 내용 | Build command | Build output directory | Root directory |
+| --- | --- | --- | --- |
+| Astro 소스 코드(이 프로젝트 등) | `npm run build` | `dist` | 비워 둠 |
+| 이미 빌드된 정적 파일(저장소 루트에 `index.html` 등이 있음) | 비워 둠 | 비워 둠 | 비워 둠 |
+
+**Save and Deploy**를 클릭하세요. 소스 코드 저장소를 연결하면 이후 push마다 자동으로 빌드 및 배포됩니다. 이미 빌드된 정적 파일이 저장된 저장소라면 Build command와 Build output directory를 비워 두면 됩니다.

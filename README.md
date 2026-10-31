@@ -102,11 +102,38 @@ Run `astro new page tags` to create `src/pages/tags.astro` from the page templat
 
 The site builds to `dist/`. This project is configured for the root domain `https://hooleeas.github.io`, so it uses `/` as its base path.
 
+### Push to GitHub with one command
+
+Run either command from the project directory. The commit message is optional:
+
+| Push | Command | What it does |
+| --- | --- | --- |
+| Source to the current `origin` repository | `npm run push:source -- "Update blog source"` | Stages and commits project changes, then pushes the current branch |
+| Build output to `hooleeas.github.io` | `npm run push:pages -- "Update website"` | Builds the site, replaces the Pages repository contents with `dist/`, and pushes to `main` |
+
+Pushing build output requires write access to `hooleeas/hooleeas.github.io` and GitHub SSH authentication. The second command replaces the website files in that repository; use it only if the repository is dedicated to this site.
+
 ### Cloudflare Pages
 
-Choose one deployment method:
+#### Deploy from a Git repository
 
-- **Automatic:** In Cloudflare, select **Workers & Pages → Create application → Pages → Connect to Git**. Choose `hooleeas/astro-blog` and `main`, then set **Framework: Astro**, **Build command: `npm run build`**, and **Build output directory: `dist`**. Leave the root directory blank and deploy. Future pushes deploy automatically.
-- **Upload `dist/`:** Run `npm run build`, create a Pages project with **Direct Upload**, and upload the `dist/` folder. For updates, build again and upload the new `dist/`.
+In Cloudflare, follow this path:
 
-The Git integration and Direct Upload methods are separate; choose one when creating the Pages project.
+```text
+Compute
+  → Workers & Pages
+  → Create application
+  → Continue to Pages
+  → Import an existing Git repository
+  → Select a forked project
+  → Begin setup
+```
+
+Choose the repository and branch to deploy (`hooleeas/astro-blog` and `main` for this project), then configure the build based on the repository contents:
+
+| Repository contents | Build command | Build output directory | Root directory |
+| --- | --- | --- | --- |
+| Astro source code (this project) | `npm run build` | `dist` | Leave blank |
+| Prebuilt static files (the repository root already contains files such as `index.html`) | Leave blank | Leave blank | Leave blank |
+
+Click **Save and Deploy**. When connected to a source-code repository, each push triggers a new build and deployment. If the repository already contains built static files, leave the build command and output directory blank.
