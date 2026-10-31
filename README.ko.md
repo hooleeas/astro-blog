@@ -27,15 +27,15 @@ npm run dev
 터미널에 표시되는 로컬 URL을 열어 미리 볼 수 있습니다. 자주 사용하는 명령:
 
 ```bash
-npm run check    # Astro 페이지와 타입 검사
+npm run check    # Astro 페이지 및 타입 검사
 npm run build    # 정적 사이트를 dist/에 빌드
-npm run preview  # 프로덕션 빌드를 로컬에서 미리 보기
-astro new note "quick thought"  # 메모 생성
-astro new post "My first post"  # 활성화된 모든 언어로 글 생성
-astro new page tags             # /tags/ 페이지 생성
+npm run preview  # 빌드된 사이트 미리 보기
+npm run note "quick thought" # 메모 생성
+npm run post "My first post" # 활성화된 모든 언어로 글 생성
+npm run page tags # /tags/ 페이지 생성
 ```
 
-마지막 인수는 메모 이름, 글 제목 또는 페이지 경로로 사용됩니다. 인수를 주면 템플릿에서 바로 파일을 만들고, 생략하면 대화형으로 입력합니다. 새 글은 활성화된 모든 언어 디렉터리에 초안으로 생성되며 같은 `translationKey`로 연결됩니다. 인수 없이 글을 만들 때는 글 이름만 한 번 입력하면 됩니다. 입력한 이름은 제목과 파일명에 사용하고 요약은 비워 둡니다. 현재 환경에서는 zsh 래퍼 함수가 `astro new`를 프로젝트 생성 스크립트로 전달합니다. 설정 후 새 터미널을 여세요. 다른 셸이나 환경에서는 `npm run astro -- new page tags`를 사용할 수 있습니다. 기존 파일은 덮어쓰지 않습니다.
+이 npm 명령은 프로젝트에 설치된 도구를 사용하므로 macOS, Windows, Linux에서 실행할 수 있습니다. `npm run preview`는 `dist/`를 미리 보며 검사나 빌드를 자동 실행하지 않습니다. 최신 변경 사항을 보려면 먼저 `npm run build`를 실행하세요. 미리 보기 서버를 종료하려면 `Ctrl+C`를 누르세요. 저장소를 복제한 뒤 `npm install`로 의존성을 설치하세요. `npm run note`, `npm run post`, `npm run page` 명령으로 콘텐츠를 만들 수 있습니다. 명령 뒤에 이름이나 경로를 입력하면 템플릿에서 바로 만들고, 생략하면 대화형으로 입력합니다. 새 글은 활성화된 모든 언어 디렉터리에 초안으로 생성되며 같은 `translationKey`로 연결됩니다. 인수 없이 글을 만들 때는 글 이름만 한 번 입력하면 됩니다.
 
 ## 글 추가하기
 
@@ -46,7 +46,7 @@ src/content/posts/zh-Hans/
 src/content/posts/en/
 ```
 
-`astro new post "My first post"`를 실행하면 활성화된 모든 언어 디렉터리에 같은 `translationKey`를 가진 초안이 생성됩니다. 인수가 없으면 글 이름만 한 번 입력하고, 입력한 이름을 제목과 파일명에 사용하며 요약은 비워 둡니다. 또는 `templates/posts/`에서 해당 언어의 Markdown 템플릿을 복사해 언어 디렉터리에 넣은 다음 frontmatter와 본문을 수정하세요. 주요 필드:
+`npm run post "My first post"`를 실행하면 활성화된 모든 언어 디렉터리에 같은 `translationKey`를 가진 초안이 생성됩니다. 인수가 없으면 글 이름만 한 번 입력하고, 입력한 이름을 제목과 파일명에 사용하며 요약은 비워 둡니다. 또는 `templates/posts/`에서 해당 언어의 Markdown 템플릿을 복사해 언어 디렉터리에 넣은 다음 frontmatter와 본문을 수정하세요. 주요 필드:
 
 | 필드 | 용도 |
 | --- | --- |
@@ -62,7 +62,7 @@ src/content/posts/en/
 
 ## 메모 추가하기
 
-메모는 짧은 내용을 기록할 때 사용합니다. `astro new note "quick thought"`를 실행하면 템플릿에서 메모를 만들고 파일 이름에 오늘 날짜를 넣습니다. 직접 만들려면 `templates/notes/note.md`를 `src/content/notes/`에 복사하고 `date`와 본문을 수정하세요. 템플릿의 기본값은 `draft: true`입니다. 게시할 준비가 되면 `false`로 변경하세요.
+메모는 짧은 내용을 기록할 때 사용합니다. `npm run note "quick thought"`를 실행하면 템플릿에서 메모를 만들고 파일 이름에 오늘 날짜를 넣습니다. 직접 만들려면 `templates/notes/note.md`를 `src/content/notes/`에 복사하고 `date`와 본문을 수정하세요. 템플릿의 기본값은 `draft: true`입니다. 게시할 준비가 되면 `false`로 변경하세요.
 
 ## 사이트 설정
 
@@ -96,22 +96,66 @@ src/content/posts/en/
 
 ## 페이지 추가하기
 
-`astro new page tags`를 실행하면 `src/pages/tags.astro`가 생성됩니다. 직접 만들려면 `templates/pages/page.astro.txt`를 `src/pages/`에 복사하고 `.txt` 확장자를 제거한 다음 페이지 이름으로 변경하세요. 예를 들어 `projects.astro`는 `/projects/` 페이지를 만듭니다.
+`npm run page tags`를 실행하면 `src/pages/tags.astro`가 생성됩니다. 직접 만들려면 `templates/pages/page.astro.txt`를 `src/pages/`에 복사하고 `.txt` 확장자를 제거한 다음 페이지 이름으로 변경하세요. 예를 들어 `projects.astro`는 `/projects/` 페이지를 만듭니다.
 
 ## 배포
 
 빌드 결과물은 `dist/`에 생성됩니다. 이 프로젝트는 루트 도메인 `https://hooleeas.github.io`를 사용하므로 `base`가 `/`로 설정되어 있습니다.
 
-### GitHub에 한 번에 푸시하기
+### 처음 푸시하기 전 설정
 
-프로젝트 디렉터리에서 다음 명령 중 하나를 실행하세요. 커밋 메시지는 생략할 수 있습니다.
+푸시 명령은 SSH를 통해 GitHub에 연결합니다. macOS, Linux 또는 Git Bash에서 진행하세요.
 
-| 푸시 대상 | 명령 | 동작 |
-| --- | --- | --- |
-| 현재 `origin` 저장소에 소스 코드 | `npm run push:source -- "Update blog source"` | 변경 사항을 스테이징하고 커밋한 뒤 현재 브랜치를 푸시 |
-| `hooleeas.github.io`에 빌드 결과물 | `npm run push:pages -- "Update website"` | 빌드 후 Pages 저장소 내용을 `dist/`로 교체하고 `main`에 푸시 |
+1. SSH 키를 만들고 공개 키를 확인합니다.
 
-빌드 결과물을 푸시하려면 `hooleeas/hooleeas.github.io` 쓰기 권한과 GitHub SSH 인증이 필요합니다. 두 번째 명령은 해당 저장소의 사이트 파일을 교체하므로 이 사이트 전용 저장소에서만 사용하세요.
+   ```bash
+   ssh-keygen -t ed25519 -C "GitHub 이메일 주소"
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+2. 표시된 공개 키를 복사해 GitHub의 **Settings → SSH and GPG keys → New SSH key**에 추가합니다. `.pub` 공개 키만 등록하세요. `.pub` 확장자가 없는 개인 키는 공유하거나 업로드하지 마세요.
+3. 연결을 확인합니다.
+
+   ```bash
+   ssh -T git@github.com
+   ```
+
+   GitHub 인사말이 표시되면 SSH 인증이 완료된 것입니다. 자세한 내용은 [GitHub SSH 문서](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)를 참고하세요.
+
+4. 프로젝트 파일 푸시 명령은 프로젝트의 `origin` 주소를 사용합니다. HTTPS로 복제했다면 본인 Fork의 SSH 주소로 변경하세요.
+
+   ```bash
+   git remote set-url origin git@github.com:YOUR-USERNAME/astro-blog.git
+   git remote -v
+   ```
+
+5. 사이트 파일 푸시 명령의 대상은 [scripts/push.js](./scripts/push.js)에 설정되어 있습니다. `pagesRepository`를 쓰기 권한이 있는 Pages 저장소의 SSH 주소로 바꾸세요. 기본 브랜치가 `main`이 아니면 `pagesBranch`도 변경하세요.
+
+   ```js
+   const pagesRepository = "git@github.com:YOUR-USERNAME/YOUR-USERNAME.github.io.git";
+   const pagesBranch = "main";
+   ```
+
+### 검사·빌드 후 GitHub에 푸시하기
+
+프로젝트 디렉터리에서 해당 명령을 실행하세요. 각 명령은 `npm run check`와 `npm run build` 후 기본 커밋 메시지로 커밋하고 푸시합니다.
+
+```bash
+npm run push-repo
+```
+
+`push-repo`: 프로젝트 파일을 현재 `origin` 저장소에 푸시합니다. Cloudflare가 연결되어 있으면 자동 배포됩니다.
+
+```bash
+npm run push-pages
+```
+
+`push-pages`: Pages 저장소 내용을 `dist/`로 교체하고 `main`에 푸시합니다.
+
+두 명령은 서로 다른 저장소에 푸시하며 서로 대체하지 않습니다. 빌드 결과물을 푸시하려면 `hooleeas/hooleeas.github.io` 쓰기 권한과 GitHub SSH 인증이 필요합니다. 두 번째 명령은 해당 저장소의 사이트 파일을 교체하므로 이 사이트 전용 저장소에서만 사용하세요.
+
 
 ### Cloudflare Pages
 

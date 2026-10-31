@@ -65,7 +65,10 @@ const pushSource = (message) => {
 };
 
 const pushPages = (message) => {
-  run("npm", ["run", "build"]);
+  pushBuiltPages(message);
+};
+
+const pushBuiltPages = (message) => {
   const distDirectory = path.join(root, "dist");
   const indexPath = path.join(distDirectory, "index.html");
   if (!existsSync(indexPath)) {
@@ -96,18 +99,19 @@ const pushPages = (message) => {
 try {
   const [mode, ...messageParts] = process.argv.slice(2);
   const messages = {
-    source: "Update blog source",
+    repo: "Update blog repository",
     pages: "Update GitHub Pages site",
   };
   if (!Object.hasOwn(messages, mode)) {
     throw new Error(
-      "用法：npm run push:source -- [提交说明]\n" +
-        "      npm run push:pages -- [提交说明]",
+      "用法：npm run push-repo\n" +
+        "      npm run push-pages",
     );
   }
   const message = messageParts.join(" ").trim() || messages[mode];
-  if (mode === "source") pushSource(message);
-  else pushPages(message);
+  if (mode === "repo") {
+    pushSource(message);
+  } else pushPages(message);
 } catch (error) {
   console.error(`推送失败：${error.message}`);
   process.exitCode = 1;

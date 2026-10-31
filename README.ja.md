@@ -28,14 +28,14 @@ npm run dev
 
 ```bash
 npm run check    # Astro ページと型をチェック
-npm run build    # dist/ に静的サイトをビルド
-npm run preview  # 本番ビルドをローカルでプレビュー
-astro new note "quick thought"  # メモを作成
-astro new post "My first post"  # 有効なすべての言語で記事を作成
-astro new page tags             # /tags/ ページを作成
+npm run build    # 静的サイトを dist/ にビルド
+npm run preview  # ビルド済みサイトをプレビュー
+npm run note "quick thought"  # メモを作成
+npm run post "My first post"  # 有効なすべての言語で記事を作成
+npm run page tags             # /tags/ ページを作成
 ```
 
-最後の引数はメモの名前、記事タイトル、またはページのパスになります。引数を指定するとテンプレートから直接ファイルを作成し、省略すると対話形式で入力します。記事は有効なすべての言語のディレクトリに下書きとして作成され、同じ `translationKey` で関連付けられます。引数なしで記事を作成する場合、入力するのは記事名だけです。その名前をタイトルとファイル名に使い、概要は空欄にします。この環境では zsh のラッパー関数が `astro new` をプロジェクトの作成スクリプトに渡します。設定後、新しいターミナルを開いてください。他のシェルや環境では `npm run astro -- new page tags` を使用できます。既存ファイルは上書きしません。
+これらの npm コマンドはプロジェクトにインストールされたツールを使い、macOS、Windows、Linux で実行できます。`npm run preview` は `dist/` をプレビューし、チェックやビルドは自動実行しません。最新の変更を確認するには先に `npm run build` を実行してください。サーバーを終了するには `Ctrl+C` を押します。clone 後に `npm install` で依存関係をインストールしてください。コンテンツは `npm run note`、`npm run post`、`npm run page` で作成できます。コマンドの後に名前やパスを指定するとテンプレートから直接作成し、省略すると対話形式で入力します。記事は有効なすべての言語のディレクトリに下書きとして作成され、同じ `translationKey` で関連付けられます。引数なしで記事を作成する場合、入力するのは記事名だけです。
 
 ## 記事を追加する
 
@@ -46,7 +46,7 @@ src/content/posts/zh-Hans/
 src/content/posts/en/
 ```
 
-`astro new post "My first post"` を実行すると、有効なすべての言語ディレクトリに同じ `translationKey` を持つ下書きが作成されます。引数なしの場合は記事名だけを尋ね、その名前をタイトルとファイル名に使い、概要は空欄にします。または、`templates/posts/` から対象言語の Markdown テンプレートをコピーし、frontmatter と本文を編集してください。主なフィールド：
+`npm run post "My first post"` を実行すると、有効なすべての言語ディレクトリに同じ `translationKey` を持つ下書きが作成されます。引数なしの場合は記事名だけを尋ね、その名前をタイトルとファイル名に使い、概要は空欄にします。または、`templates/posts/` から対象言語の Markdown テンプレートをコピーし、frontmatter と本文を編集してください。主なフィールド：
 
 | フィールド | 用途 |
 | --- | --- |
@@ -62,7 +62,7 @@ src/content/posts/en/
 
 ## メモを追加する
 
-メモは短い文章向けです。`astro new note "quick thought"` を実行すると、テンプレートからメモが作成され、ファイル名に当日の日付が付与されます。手動で作成する場合は、`templates/notes/note.md` を `src/content/notes/` にコピーし、`date` と本文を編集してください。テンプレートは `draft: true` が初期値です。公開するときは `false` に変更します。
+メモは短い文章向けです。`npm run note "quick thought"` を実行すると、テンプレートからメモが作成され、ファイル名に当日の日付が付与されます。手動で作成する場合は、`templates/notes/note.md` を `src/content/notes/` にコピーし、`date` と本文を編集してください。テンプレートは `draft: true` が初期値です。公開するときは `false` に変更します。
 
 ## サイトを設定する
 
@@ -96,22 +96,66 @@ src/content/posts/en/
 
 ## ページを追加する
 
-`astro new page tags` を実行すると `src/pages/tags.astro` が作成されます。手動で作成する場合は、`templates/pages/page.astro.txt` を `src/pages/` にコピーし、`.txt` を削除してページ名に変更します。たとえば `projects.astro` は `/projects/` になります。
+`npm run page tags` を実行すると `src/pages/tags.astro` が作成されます。手動で作成する場合は、`templates/pages/page.astro.txt` を `src/pages/` にコピーし、`.txt` を削除してページ名に変更します。たとえば `projects.astro` は `/projects/` になります。
 
 ## デプロイ
 
 ビルド成果物は `dist/` に出力されます。このプロジェクトはルートドメイン `https://hooleeas.github.io` を使うため、`base` は `/` に設定されています。
 
-### GitHub へのワンコマンド push
+### 初回 push 前の準備
 
-プロジェクトのディレクトリで次のいずれかを実行します。コミットメッセージは省略できます。
+push コマンドは SSH で GitHub に接続します。macOS、Linux、または Git Bash で操作してください。
 
-| push 対象 | コマンド | 動作 |
-| --- | --- | --- |
-| 現在の `origin` リポジトリにソースを push | `npm run push:source -- "Update blog source"` | 変更をステージしてコミットし、現在のブランチを push |
-| `hooleeas.github.io` にビルド成果物を push | `npm run push:pages -- "Update website"` | ビルド後、Pages リポジトリの内容を `dist/` で置き換えて `main` に push |
+1. SSH キーを生成し、公開鍵を表示します。
 
-ビルド成果物の push には `hooleeas/hooleeas.github.io` への書き込み権限と GitHub SSH 認証が必要です。2 つ目のコマンドはリポジトリ内のサイトファイルを置き換えるため、このサイト専用のリポジトリでのみ使用してください。
+   ```bash
+   ssh-keygen -t ed25519 -C "GitHub のメールアドレス"
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+2. 表示された公開鍵をコピーし、GitHub の **Settings → SSH and GPG keys → New SSH key** に登録します。登録するのは `.pub` 公開鍵だけです。`.pub` が付かない秘密鍵は共有・アップロードしないでください。
+3. 接続を確認します。
+
+   ```bash
+   ssh -T git@github.com
+   ```
+
+   GitHub の挨拶メッセージが表示されれば SSH 認証は成功です。詳しくは [GitHub SSH ドキュメント](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) を参照してください。
+
+4. ソースを push するコマンドはプロジェクトの `origin` URL を使います。HTTPS で clone した場合は、自分の Fork の SSH URL に変更します。
+
+   ```bash
+   git remote set-url origin git@github.com:YOUR-USERNAME/astro-blog.git
+   git remote -v
+   ```
+
+5. サイトを push するコマンドの送信先は [scripts/push.js](./scripts/push.js) で設定されています。`pagesRepository` を書き込み権限のある Pages リポジトリの SSH URL に変更します。デフォルトブランチが `main` 以外の場合は `pagesBranch` も変更します。
+
+   ```js
+   const pagesRepository = "git@github.com:YOUR-USERNAME/YOUR-USERNAME.github.io.git";
+   const pagesBranch = "main";
+   ```
+
+### チェック・ビルドして GitHub に push
+
+プロジェクトのディレクトリで該当するコマンドを実行します。各コマンドは `npm run check` と `npm run build` の後、既定のコミットメッセージでコミット・push します。
+
+```bash
+npm run push-repo
+```
+
+`push-repo`：プロジェクトファイルを現在の `origin` リポジトリに push します。Cloudflare が接続されていれば自動デプロイされます。
+
+```bash
+npm run push-pages
+```
+
+`push-pages`：Pages リポジトリの内容を `dist/` で置き換えて `main` に push します。
+
+2 つのコマンドは別々のリポジトリに push するため、互いに置き換えるものではありません。ビルド成果物の push には `hooleeas/hooleeas.github.io` への書き込み権限と GitHub SSH 認証が必要です。2 つ目のコマンドはリポジトリ内のサイトファイルを置き換えるため、このサイト専用のリポジトリでのみ使用してください。
+
 
 ### Cloudflare Pages
 

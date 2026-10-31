@@ -29,13 +29,13 @@ Open the local URL printed in the terminal. Common commands:
 ```bash
 npm run check    # Check Astro pages and types
 npm run build    # Build the static site into dist/
-npm run preview  # Preview the production build locally
-astro new note "quick thought"  # Create a note
-astro new post "My first post"  # Create posts in all enabled languages
-astro new page tags             # Create /tags/
+npm run preview  # Preview the built site
+npm run note "quick thought"  # Create a note
+npm run post "My first post"  # Create posts in all enabled languages
+npm run page tags             # Create /tags/
 ```
 
-The final argument is the note name, post title, or page path. Supplying it creates the file immediately from the matching template; omit it to enter details interactively. A post is created in every enabled language and the files share a `translationKey`; generated translations start as drafts. On this machine, a zsh wrapper maps `astro new` to the project generator; open a new terminal after setup. On another shell or machine, use `npm run astro -- new page tags`. The generator refuses to overwrite existing files.
+These npm commands use the project-installed tools and work on macOS, Windows, and Linux. `npm run preview` previews `dist/` and does not check or build automatically; run `npm run build` first to preview the latest changes. The preview server keeps running until you press `Ctrl+C`. Run `npm install` after cloning to install dependencies. Create content with `npm run note`, `npm run post`, or `npm run page`; add a name or path after the command to create from the template immediately, or omit it to enter details interactively. A post is created in every enabled language and the files share a `translationKey`; generated translations start as drafts.
 
 ## Add a post
 
@@ -46,7 +46,7 @@ src/content/posts/zh-Hans/
 src/content/posts/en/
 ```
 
-Run `astro new post "My first post"` to create a matching draft in every enabled language directory. Without an argument, the command asks only for the post name; it uses that name for the title and filename, and leaves the subtitle empty. All generated files share a `translationKey`. Or copy a Markdown template for the target language from `templates/posts/` into its language directory and edit the frontmatter and body. Common fields:
+Run `npm run post "My first post"` to create a matching draft in every enabled language directory. Without an argument, the command asks only for the post name; it uses that name for the title and filename, and leaves the subtitle empty. All generated files share a `translationKey`. Or copy a Markdown template for the target language from `templates/posts/` into its language directory and edit the frontmatter and body. Common fields:
 
 | Field | Purpose |
 | --- | --- |
@@ -62,7 +62,7 @@ The directory determines the post language. Use the same `translationKey` for tr
 
 ## Add a note
 
-Notes are intended for short entries. Run `astro new note "quick thought"` to create one from the template with today's date in its filename. You can also copy `templates/notes/note.md` into `src/content/notes/` manually. The template defaults to `draft: true`; set it to `false` when the note is ready to publish.
+Notes are intended for short entries. Run `npm run note "quick thought"` to create one from the template with today's date in its filename. You can also copy `templates/notes/note.md` into `src/content/notes/` manually. The template defaults to `draft: true`; set it to `false` when the note is ready to publish.
 
 ## Configure the site
 
@@ -96,22 +96,66 @@ Use `articlePage` in `posts.jsonc` to control the table of contents, sharing car
 
 ## Add a page
 
-Run `astro new page tags` to create `src/pages/tags.astro` from the page template. Alternatively, copy `templates/pages/page.astro.txt` into `src/pages/`, remove the `.txt` suffix, and rename it—for example, `projects.astro` creates `/projects/`.
+Run `npm run page tags` to create `src/pages/tags.astro` from the page template. Alternatively, copy `templates/pages/page.astro.txt` into `src/pages/`, remove the `.txt` suffix, and rename it—for example, `projects.astro` creates `/projects/`.
 
 ## Deployment
 
 The site builds to `dist/`. This project is configured for the root domain `https://hooleeas.github.io`, so it uses `/` as its base path.
 
-### Push to GitHub with one command
+### Set up GitHub SSH before pushing
 
-Run either command from the project directory. The commit message is optional:
+The push commands connect to GitHub over SSH. On macOS, Linux, or Git Bash:
 
-| Push | Command | What it does |
-| --- | --- | --- |
-| Source to the current `origin` repository | `npm run push:source -- "Update blog source"` | Stages and commits project changes, then pushes the current branch |
-| Build output to `hooleeas.github.io` | `npm run push:pages -- "Update website"` | Builds the site, replaces the Pages repository contents with `dist/`, and pushes to `main` |
+1. Generate an SSH key and display its public key:
 
-Pushing build output requires write access to `hooleeas/hooleeas.github.io` and GitHub SSH authentication. The second command replaces the website files in that repository; use it only if the repository is dedicated to this site.
+   ```bash
+   ssh-keygen -t ed25519 -C "your GitHub email"
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+2. Copy the public key and add it in GitHub under **Settings → SSH and GPG keys → New SSH key**. Add only the `.pub` public key; never share or upload the private key without the `.pub` suffix.
+3. Verify the connection:
+
+   ```bash
+   ssh -T git@github.com
+   ```
+
+   A GitHub greeting confirms SSH authentication. See the [GitHub SSH documentation](https://docs.github.com/en/authentication/connecting-to-github-with-ssh) for details.
+
+4. The source push command uses the project's `origin` URL. If you cloned over HTTPS, change it to your fork's SSH URL:
+
+   ```bash
+   git remote set-url origin git@github.com:YOUR-USERNAME/astro-blog.git
+   git remote -v
+   ```
+
+5. The website push command uses the target configured in [scripts/push.js](./scripts/push.js). Change `pagesRepository` to the SSH URL of a Pages repository you can write to. If its default branch is not `main`, also change `pagesBranch`:
+
+   ```js
+   const pagesRepository = "git@github.com:YOUR-USERNAME/YOUR-USERNAME.github.io.git";
+   const pagesBranch = "main";
+   ```
+
+### Check, build, and push to GitHub
+
+Run the relevant command from the project directory. Each command runs `npm run check` and `npm run build`, then commits and pushes with a default commit message:
+
+```bash
+npm run push-repo
+```
+
+`push-repo`: pushes project files to the current `origin` repository; Cloudflare deploys automatically if connected to it.
+
+```bash
+npm run push-pages
+```
+
+`push-pages`: replaces the Pages repository contents with `dist/` and pushes to `main`.
+
+The commands push to separate repositories and do not replace each other. Pushing build output requires write access to `hooleeas/hooleeas.github.io` and GitHub SSH authentication. The second command replaces the website files in that repository; use it only if the repository is dedicated to this site.
+
 
 ### Cloudflare Pages
 

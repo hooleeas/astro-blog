@@ -29,13 +29,13 @@ npm run dev
 ```bash
 npm run check    # 检查 Astro 页面和类型
 npm run build    # 构建静态网站到 dist/
-npm run preview  # 在本地预览生产构建
-astro new note "随手记"  # 新建随记
-astro new post "我的第一篇文章"  # 同时新建所有启用语言的文章
-astro new page tags  # 新建 /tags/ 页面
+npm run preview  # 预览已构建的网站
+npm run note "随手记"  # 新建随记
+npm run post "我的第一篇文章"  # 同时新建所有启用语言的文章
+npm run page tags  # 新建 /tags/ 页面
 ```
 
-末尾参数分别作为随记名称、文章标题或页面路径。填写参数后会直接从模板创建文件；省略参数则会交互填写信息。新建文章会为所有已启用语言各创建一份草稿，并使用相同的 `translationKey` 关联。无参数创建文章时只需输入一次文章名，该名称同时用于标题和文件名，简介留空。本机已在 zsh 中配置包装函数，将 `astro new` 转给项目创建脚本；配置后请新开终端。在其他 shell 或设备上可使用 `npm run astro -- new page tags`。脚本不会覆盖已有文件。
+这些 npm 命令使用项目安装的工具，适用于 macOS、Windows 和 Linux。`npm run preview` 预览 `dist/`，不会自动检查或构建；需要查看最新改动时，先运行 `npm run build`。预览服务器启动后会持续运行，按 `Ctrl+C` 停止。克隆项目后先运行 `npm install` 安装依赖。新增内容命令分别是 `npm run note`、`npm run post` 和 `npm run page`；在命令后添加名称或路径会直接从模板创建文件，省略参数则会交互填写信息。新建文章会为所有已启用语言各创建一份草稿，并使用相同的 `translationKey` 关联。无参数创建文章时只需输入一次文章名，该名称同时用于标题和文件名，简介留空。脚本不会覆盖已有文件。
 
 ## 添加文章
 
@@ -46,7 +46,7 @@ src/content/posts/zh-Hans/
 src/content/posts/en/
 ```
 
-运行 `astro new post "我的第一篇文章"` 会在每个已启用语言目录中创建一份关联草稿。不带参数时只会询问一次文章名，并将其用于标题和文件名；简介保持空白。也可以将 `templates/posts/` 中对应语言的 Markdown 模板复制到相应目录，再编辑 frontmatter 和正文。常用字段：
+运行 `npm run post "我的第一篇文章"` 会在每个已启用语言目录中创建一份关联草稿。不带参数时只会询问一次文章名，并将其用于标题和文件名；简介保持空白。也可以将 `templates/posts/` 中对应语言的 Markdown 模板复制到相应目录，再编辑 frontmatter 和正文。常用字段：
 
 | 字段 | 用途 |
 | --- | --- |
@@ -62,7 +62,7 @@ src/content/posts/en/
 
 ## 添加随记
 
-随记适合几句话的短内容。运行 `astro new note "随手记"`，脚本会从模板创建随记，并将当天日期加入文件名。也可以手动将 `templates/notes/note.md` 复制到 `src/content/notes/`。模板默认 `draft: true`；准备发布时将其设为 `false`。
+随记适合几句话的短内容。运行 `npm run note "随手记"`，脚本会从模板创建随记，并将当天日期加入文件名。也可以手动将 `templates/notes/note.md` 复制到 `src/content/notes/`。模板默认 `draft: true`；准备发布时将其设为 `false`。
 
 ## 配置站点
 
@@ -96,22 +96,66 @@ src/content/posts/en/
 
 ## 添加页面
 
-运行 `astro new page tags`，脚本会创建 `src/pages/tags.astro`。也可以将 `templates/pages/page.astro.txt` 复制到 `src/pages/`，去掉 `.txt` 后缀并按用途重命名。例如，`projects.astro` 对应 `/projects/`。
+运行 `npm run page tags`，脚本会创建 `src/pages/tags.astro`。也可以将 `templates/pages/page.astro.txt` 复制到 `src/pages/`，去掉 `.txt` 后缀并按用途重命名。例如，`projects.astro` 对应 `/projects/`。
 
 ## 部署
 
 网站构建产物位于 `dist/`。本项目使用根域名 `https://hooleeas.github.io`，因此 `base` 为 `/`。
 
-### 一键推送到 GitHub
+### 首次推送前的准备
 
-在项目目录运行以下命令；提交说明可自定义，不填写时会使用默认说明：
+推送命令通过 SSH 连接 GitHub。使用 macOS、Linux 或 Git Bash：
 
-| 推送内容 | 命令 | 操作 |
-| --- | --- | --- |
-| 源码到当前 `origin` 仓库 | `npm run push:source -- "更新博客源码"` | 暂存并提交项目变更，然后推送当前分支 |
-| 构建产物到 `hooleeas.github.io` | `npm run push:pages -- "更新网站"` | 先构建，再用 `dist/` 替换 Pages 仓库内容并推送到 `main` |
+1. 生成 SSH 密钥，并查看公钥：
 
-推送构建产物需要对 `hooleeas/hooleeas.github.io` 有写入权限，并已配置 GitHub SSH 认证。第二条命令会替换目标仓库中的网站文件，请确认该仓库专用于此站点。
+   ```bash
+   ssh-keygen -t ed25519 -C "你的 GitHub 邮箱"
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+2. 复制显示的公钥，在 GitHub 打开 **Settings → SSH and GPG keys → New SSH key** 添加。只添加 `.pub` 公钥，不要分享或上传没有 `.pub` 后缀的私钥。
+3. 验证连接：
+
+   ```bash
+   ssh -T git@github.com
+   ```
+
+   看到 GitHub 的问候信息表示 SSH 认证成功。详细说明见 [GitHub SSH 文档](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)。
+
+4. 源码推送命令使用项目的 `origin` 地址。若克隆时使用 HTTPS，将它改为你 Fork 后的 SSH 地址：
+
+   ```bash
+   git remote set-url origin git@github.com:你的用户名/astro-blog.git
+   git remote -v
+   ```
+
+5. 网站推送命令使用 [scripts/push.js](./scripts/push.js) 中的目标仓库设置。将 `pagesRepository` 改为你有写入权限的 Pages 仓库 SSH 地址；如果该仓库默认分支不是 `main`，同时修改 `pagesBranch`：
+
+   ```js
+   const pagesRepository = "git@github.com:你的用户名/你的用户名.github.io.git";
+   const pagesBranch = "main";
+   ```
+
+### 检查、构建并推送到 GitHub
+
+在项目目录运行对应命令。脚本会先运行 `npm run check` 和 `npm run build`，再使用默认提交说明提交并推送：
+
+```bash
+npm run push-repo
+```
+
+`push-repo`：推送项目文件到当前 `origin` 仓库；若 Cloudflare 连接此仓库，会自动部署。
+
+```bash
+npm run push-pages
+```
+
+`push-pages`：用 `dist/` 替换 Pages 仓库内容并推送到 `main`。
+
+两条命令分别推送到不同仓库，不会互相代替。推送构建产物需要对 `hooleeas/hooleeas.github.io` 有写入权限并配置 GitHub SSH 认证；第二条命令会替换目标仓库中的网站文件，请确认该仓库专用于此站点。
+
 
 ### Cloudflare Pages
 

@@ -8,9 +8,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "astro": "node scripts/astro.js",
-    "push:source": "node scripts/push.js source",
-    "push:pages": "node scripts/push.js pages"
+    "note": "node scripts/new.js note",
+    "post": "node scripts/new.js post",
+    "page": "node scripts/new.js page",
+    "push-repo": "npm run check && npm run build && node scripts/push.js repo",
+    "push-pages": "npm run check && npm run build && node scripts/push.js pages"
   },
   "dependencies": {
     "astro": "5.15.9",

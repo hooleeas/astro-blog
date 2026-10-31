@@ -28,14 +28,14 @@ npm run dev
 
 ```bash
 npm run check    # 檢查 Astro 頁面與型別
-npm run build    # 將靜態網站建置至 dist/
-npm run preview  # 在本機預覽正式建置結果
-astro new note "隨手記"  # 新增隨記
-astro new post "我的第一篇文章"  # 同時新增所有啟用語言的文章
-astro new page tags  # 新增 /tags/ 頁面
+npm run build    # 建置靜態網站至 dist/
+npm run preview  # 預覽已建置的網站
+npm run note "隨手記"  # 新增隨記
+npm run post "我的第一篇文章"  # 同時新增所有啟用語言的文章
+npm run page tags  # 新增 /tags/ 頁面
 ```
 
-最後的參數分別作為隨記名稱、文章標題或頁面路徑。提供參數時會直接從範本建立檔案；省略參數則會互動輸入資訊。新增文章時會在所有已啟用語言目錄中各建立一份草稿，並以相同的 `translationKey` 關聯。不帶參數建立文章時只需輸入一次文章名稱，該名稱會同時用於標題與檔名，簡介則留白。本機已在 zsh 中設定包裝函式，會將 `astro new` 轉交給專案建立腳本；設定後請重新開啟終端機。在其他 shell 或裝置上可使用 `npm run astro -- new page tags`。指令不會覆寫已存在的檔案。
+這些 npm 命令使用專案安裝的工具，適用於 macOS、Windows 和 Linux。`npm run preview` 預覽 `dist/`，不會自動檢查或建置；要預覽最新變更，請先執行 `npm run build`。預覽伺服器啟動後會持續執行，按 `Ctrl+C` 停止。複製專案後先執行 `npm install` 安裝相依套件。使用 `npm run note`、`npm run post` 或 `npm run page` 建立內容；在指令後加入名稱或路徑即可直接從範本建立，省略參數則會互動輸入資訊。新增文章時會在所有已啟用語言目錄中各建立一份草稿，並以相同的 `translationKey` 關聯。不帶參數建立文章時只需輸入一次文章名稱，該名稱會同時用於標題與檔名，簡介則留白。
 
 ## 新增文章
 
@@ -46,7 +46,7 @@ src/content/posts/zh-Hans/
 src/content/posts/en/
 ```
 
-執行 `astro new post "我的第一篇文章"` 會在每個已啟用語言目錄中建立一份已關聯的草稿。不帶參數時只會詢問一次文章名稱，並將其用於標題與檔名；簡介保持空白。也可以將 `templates/posts/` 中對應語言的 Markdown 範本複製到相應目錄，再編輯 frontmatter 與內文。常用欄位：
+執行 `npm run post "我的第一篇文章"` 會在每個已啟用語言目錄中建立一份已關聯的草稿。不帶參數時只會詢問一次文章名稱，並將其用於標題與檔名；簡介保持空白。也可以將 `templates/posts/` 中對應語言的 Markdown 範本複製到相應目錄，再編輯 frontmatter 與內文。常用欄位：
 
 | 欄位 | 用途 |
 | --- | --- |
@@ -62,7 +62,7 @@ src/content/posts/en/
 
 ## 新增隨記
 
-隨記適合幾句話的短內容。執行 `astro new note "隨手記"`，指令會從範本建立隨記，並將當天日期加入檔名。也可以手動將 `templates/notes/note.md` 複製到 `src/content/notes/`。範本預設為 `draft: true`；準備發布時請改為 `false`。
+隨記適合幾句話的短內容。執行 `npm run note "隨手記"`，指令會從範本建立隨記，並將當天日期加入檔名。也可以手動將 `templates/notes/note.md` 複製到 `src/content/notes/`。範本預設為 `draft: true`；準備發布時請改為 `false`。
 
 ## 設定網站
 
@@ -96,22 +96,66 @@ src/content/posts/en/
 
 ## 新增頁面
 
-執行 `astro new page tags`，指令會建立 `src/pages/tags.astro`。也可以將 `templates/pages/page.astro.txt` 複製到 `src/pages/`，移除 `.txt` 副檔名並依用途重新命名。例如，`projects.astro` 對應 `/projects/`。
+執行 `npm run page tags`，指令會建立 `src/pages/tags.astro`。也可以將 `templates/pages/page.astro.txt` 複製到 `src/pages/`，移除 `.txt` 副檔名並依用途重新命名。例如，`projects.astro` 對應 `/projects/`。
 
 ## 部署
 
 網站建置產物位於 `dist/`。本專案使用根網域 `https://hooleeas.github.io`，因此 `base` 設為 `/`。
 
-### 一鍵推送到 GitHub
+### 首次推送前的準備
 
-在專案目錄執行以下指令；提交說明可自訂，不填時會使用預設說明：
+推送指令透過 SSH 連線 GitHub。使用 macOS、Linux 或 Git Bash：
 
-| 推送內容 | 指令 | 操作 |
-| --- | --- | --- |
-| 原始碼到目前的 `origin` 儲存庫 | `npm run push:source -- "更新部落格原始碼"` | 暫存並提交專案變更，再推送目前分支 |
-| 建置產物到 `hooleeas.github.io` | `npm run push:pages -- "更新網站"` | 先建置，再以 `dist/` 取代 Pages 儲存庫內容並推送到 `main` |
+1. 產生 SSH 金鑰並查看公開金鑰：
 
-推送建置產物需要有 `hooleeas/hooleeas.github.io` 的寫入權限，並已設定 GitHub SSH 驗證。第二個指令會取代目標儲存庫中的網站檔案，請確認該儲存庫專用於此網站。
+   ```bash
+   ssh-keygen -t ed25519 -C "你的 GitHub 電子郵件"
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+2. 複製顯示的公開金鑰，在 GitHub 開啟 **Settings → SSH and GPG keys → New SSH key** 新增。只新增 `.pub` 公開金鑰，不要分享或上傳沒有 `.pub` 副檔名的私密金鑰。
+3. 驗證連線：
+
+   ```bash
+   ssh -T git@github.com
+   ```
+
+   看到 GitHub 的問候訊息即表示 SSH 驗證成功。詳細說明請見 [GitHub SSH 文件](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)。
+
+4. 推送專案檔案的指令會使用專案的 `origin` 位址。若複製時使用 HTTPS，請改成你 Fork 後的 SSH 位址：
+
+   ```bash
+   git remote set-url origin git@github.com:你的使用者名稱/astro-blog.git
+   git remote -v
+   ```
+
+5. 推送網站檔案的指令會使用 [scripts/push.js](./scripts/push.js) 中的目標儲存庫設定。將 `pagesRepository` 改成你有寫入權限的 Pages 儲存庫 SSH 位址；若預設分支不是 `main`，也請修改 `pagesBranch`：
+
+   ```js
+   const pagesRepository = "git@github.com:你的使用者名稱/你的使用者名稱.github.io.git";
+   const pagesBranch = "main";
+   ```
+
+### 檢查、建置並推送到 GitHub
+
+在專案目錄執行對應指令。腳本會先執行 `npm run check` 和 `npm run build`，再使用預設提交說明提交並推送：
+
+```bash
+npm run push-repo
+```
+
+`push-repo`：推送專案檔案到目前的 `origin` 儲存庫；若 Cloudflare 連接此儲存庫，會自動部署。
+
+```bash
+npm run push-pages
+```
+
+`push-pages`：以 `dist/` 取代 Pages 儲存庫內容並推送到 `main`。
+
+兩個指令會推送到不同儲存庫，不能互相取代。推送建置產物需要有 `hooleeas/hooleeas.github.io` 的寫入權限，並已設定 GitHub SSH 驗證；第二個指令會取代目標儲存庫中的網站檔案，請確認該儲存庫專用於此網站。
+
 
 ### Cloudflare Pages
 

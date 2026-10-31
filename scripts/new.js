@@ -183,12 +183,10 @@ const createPage = async (nameArgument) => {
 };
 
 try {
-  const [command, type, ...nameParts] = process.argv.slice(2);
+  const [type, ...nameParts] = process.argv.slice(2);
   const nameArgument = nameParts.join(" ").trim();
-  if (command !== "new" || !["note", "post", "page"].includes(type)) {
-    throw new Error(
-      "用法：astro new <note|post|page> [名称]",
-    );
+  if (!["note", "post", "page"].includes(type)) {
+    throw new Error("请通过 npm run note、npm run post 或 npm run page 运行。");
   }
   if (type === "note") await createNote(nameArgument);
   else if (type === "post") await createPost(nameArgument);
