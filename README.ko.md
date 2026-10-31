@@ -27,13 +27,26 @@ npm run dev
 터미널에 표시되는 로컬 URL을 열어 미리 볼 수 있습니다. 자주 사용하는 명령:
 
 ```bash
-npm run check    # Astro 페이지 및 타입 검사
-npm run build    # 정적 사이트를 dist/에 빌드
-npm run preview  # 빌드된 사이트 미리 보기
-npm run note "quick thought" # 메모 생성
-npm run post "My first post" # 활성화된 모든 언어로 글 생성
-npm run page tags # /tags/ 페이지 생성
+npm run check
+npm run build
+npm run preview
 ```
+`check`는 Astro 페이지와 타입을 검사하고, `build`는 사이트를 빌드하며, `preview`는 빌드된 사이트를 미리 봅니다.
+
+```bash
+npm run note "quick thought"
+```
+메모를 생성합니다.
+
+```bash
+npm run post "My first post"
+```
+활성화된 모든 언어 디렉터리에 서로 연결된 초안을 생성합니다.
+
+```bash
+npm run page tags
+```
+템플릿에서 `/tags/` 페이지를 생성합니다.
 
 이 npm 명령은 프로젝트에 설치된 도구를 사용하므로 macOS, Windows, Linux에서 실행할 수 있습니다. `npm run preview`는 `dist/`를 미리 보며 검사나 빌드를 자동 실행하지 않습니다. 최신 변경 사항을 보려면 먼저 `npm run build`를 실행하세요. 미리 보기 서버를 종료하려면 `Ctrl+C`를 누르세요. 저장소를 복제한 뒤 `npm install`로 의존성을 설치하세요. `npm run note`, `npm run post`, `npm run page` 명령으로 콘텐츠를 만들 수 있습니다. 명령 뒤에 이름이나 경로를 입력하면 템플릿에서 바로 만들고, 생략하면 대화형으로 입력합니다. 새 글은 활성화된 모든 언어 디렉터리에 초안으로 생성되며 같은 `translationKey`로 연결됩니다. 인수 없이 글을 만들 때는 글 이름만 한 번 입력하면 됩니다.
 

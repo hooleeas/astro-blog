@@ -27,13 +27,26 @@ npm run dev
 使用終端機輸出的本機網址開啟預覽。常用指令：
 
 ```bash
-npm run check    # 檢查 Astro 頁面與型別
-npm run build    # 建置靜態網站至 dist/
-npm run preview  # 預覽已建置的網站
-npm run note "隨手記"  # 新增隨記
-npm run post "我的第一篇文章"  # 同時新增所有啟用語言的文章
-npm run page tags  # 新增 /tags/ 頁面
+npm run check
+npm run build
+npm run preview
 ```
+`check` 檢查 Astro 頁面與型別，`build` 建置網站，`preview` 預覽已建置的網站。
+
+```bash
+npm run note "隨手記"
+```
+新增一則隨記。
+
+```bash
+npm run post "我的第一篇文章"
+```
+在所有已啟用語言目錄中建立相關聯的草稿。
+
+```bash
+npm run page tags
+```
+從範本新增 `/tags/` 頁面。
 
 這些 npm 命令使用專案安裝的工具，適用於 macOS、Windows 和 Linux。`npm run preview` 預覽 `dist/`，不會自動檢查或建置；要預覽最新變更，請先執行 `npm run build`。預覽伺服器啟動後會持續執行，按 `Ctrl+C` 停止。複製專案後先執行 `npm install` 安裝相依套件。使用 `npm run note`、`npm run post` 或 `npm run page` 建立內容；在指令後加入名稱或路徑即可直接從範本建立，省略參數則會互動輸入資訊。新增文章時會在所有已啟用語言目錄中各建立一份草稿，並以相同的 `translationKey` 關聯。不帶參數建立文章時只需輸入一次文章名稱，該名稱會同時用於標題與檔名，簡介則留白。
 

@@ -27,13 +27,26 @@ npm run dev
 ターミナルに表示されたローカル URL を開いてください。主なコマンド：
 
 ```bash
-npm run check    # Astro ページと型をチェック
-npm run build    # 静的サイトを dist/ にビルド
-npm run preview  # ビルド済みサイトをプレビュー
-npm run note "quick thought"  # メモを作成
-npm run post "My first post"  # 有効なすべての言語で記事を作成
-npm run page tags             # /tags/ ページを作成
+npm run check
+npm run build
+npm run preview
 ```
+`check` は Astro ページと型を検査し、`build` はサイトをビルド、`preview` はビルド済みサイトを表示します。
+
+```bash
+npm run note "quick thought"
+```
+メモを作成します。
+
+```bash
+npm run post "My first post"
+```
+有効なすべての言語ディレクトリに、同じ記事として関連付けられた下書きを作成します。
+
+```bash
+npm run page tags
+```
+テンプレートから `/tags/` ページを作成します。
 
 これらの npm コマンドはプロジェクトにインストールされたツールを使い、macOS、Windows、Linux で実行できます。`npm run preview` は `dist/` をプレビューし、チェックやビルドは自動実行しません。最新の変更を確認するには先に `npm run build` を実行してください。サーバーを終了するには `Ctrl+C` を押します。clone 後に `npm install` で依存関係をインストールしてください。コンテンツは `npm run note`、`npm run post`、`npm run page` で作成できます。コマンドの後に名前やパスを指定するとテンプレートから直接作成し、省略すると対話形式で入力します。記事は有効なすべての言語のディレクトリに下書きとして作成され、同じ `translationKey` で関連付けられます。引数なしで記事を作成する場合、入力するのは記事名だけです。
 

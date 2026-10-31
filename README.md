@@ -27,13 +27,26 @@ npm run dev
 Open the local URL printed in the terminal. Common commands:
 
 ```bash
-npm run check    # Check Astro pages and types
-npm run build    # Build the static site into dist/
-npm run preview  # Preview the built site
-npm run note "quick thought"  # Create a note
-npm run post "My first post"  # Create posts in all enabled languages
-npm run page tags             # Create /tags/
+npm run check
+npm run build
+npm run preview
 ```
+`check` validates Astro pages and types, `build` builds the site, and `preview` serves the built site.
+
+```bash
+npm run note "quick thought"
+```
+Creates a note.
+
+```bash
+npm run post "My first post"
+```
+Creates a linked draft in every enabled language directory.
+
+```bash
+npm run page tags
+```
+Creates a `/tags/` page from the template.
 
 These npm commands use the project-installed tools and work on macOS, Windows, and Linux. `npm run preview` previews `dist/` and does not check or build automatically; run `npm run build` first to preview the latest changes. The preview server keeps running until you press `Ctrl+C`. Run `npm install` after cloning to install dependencies. Create content with `npm run note`, `npm run post`, or `npm run page`; add a name or path after the command to create from the template immediately, or omit it to enter details interactively. A post is created in every enabled language and the files share a `translationKey`; generated translations start as drafts.
 
