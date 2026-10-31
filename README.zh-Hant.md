@@ -102,29 +102,14 @@ src/content/posts/en/
 
 網站建置產物位於 `dist/`。本專案使用根網域 `https://hooleeas.github.io`，因此 `base` 設為 `/`。
 
-### GitHub Pages：只發布建置產物
-
-原始碼儲存庫可以保持私人。`.github/workflows/deploy.yml` 會建置網站，並只將 `dist/` 內容推送至 `hooleeas/hooleeas.github.io` 儲存庫的 `main` 分支。
-
-1. 建立 Fine-grained personal access token，僅授予 `hooleeas/hooleeas.github.io` 儲存庫 **Contents: Read and write** 權限。
-2. 在原始碼儲存庫的 **Settings → Secrets and variables → Actions** 新增 secret，名稱設為 `PAGES_DEPLOY_TOKEN`，值填入剛建立的 Token。
-3. 在 `hooleeas/hooleeas.github.io` 儲存庫開啟 **Settings → Pages → Build and deployment → Source**，選擇 **Deploy from a branch**，分支選 `main`，目錄選 `/(root)`。
-4. 推送變更至原始碼儲存庫的 `main` 或 `master`，或在其 Actions 頁面手動執行 **Build and publish site**。
-
-工作流程需要 `PAGES_DEPLOY_TOKEN` 才能寫入獨立的 Pages 儲存庫；請勿將 Token 寫入原始碼。手動發布時，執行 `npm run build`，再將 `dist/` 內容推送至 Pages 儲存庫的 `main` 分支。
-
-### Cloudflare Pages：連結建置產物儲存庫
-
-若連結 `hooleeas/hooleeas.github.io`，儲存庫根目錄已是建置產物（包含 `index.html`、`_astro/` 等檔案）。框架預設選擇 **None**，建置指令、建置輸出目錄與根目錄皆留白。此設定已在本專案實測成功。產物推送工作流程更新 `main` 分支後，Cloudflare 會自動部署更新後的檔案。
-
-### Cloudflare Pages：從原始碼儲存庫建置
-
-也可以直接連結原始碼儲存庫：
+### Cloudflare Pages：建置此示範儲存庫
 
 1. 在 Cloudflare 控制台前往 **Workers & Pages → Create application → Pages → Connect to Git**。
-2. 連結 GitHub，選擇原始碼儲存庫與部署分支。
+2. 連結 GitHub，選擇公開的 `hooleeas/astro-blog` 儲存庫與 `main` 分支。
 3. 框架預設選擇 **Astro**，建置指令填入 `npm run build`，建置輸出目錄填入 `dist`，根目錄留白。
 4. 按下 **Save and Deploy**。之後推送至所選分支時，Cloudflare 會自動建置並部署。
+
+此儲存庫是公開的示範原始碼。獨立的 `hooleeas/hooleeas.github.io` 儲存庫保留給站點擁有者的個人網站使用，不會由此示範專案修改。
 
 ### Cloudflare Pages：只上傳 `dist/`（Direct Upload）
 

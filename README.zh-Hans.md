@@ -102,29 +102,14 @@ src/content/posts/en/
 
 网站构建产物位于 `dist/`。本项目使用根域名 `https://hooleeas.github.io`，因此 `base` 为 `/`。
 
-### GitHub Pages：只发布构建产物
-
-源码仓库可以保持私有。`.github/workflows/deploy.yml` 会构建网站，并只将 `dist/` 内容推送到 `hooleeas/hooleeas.github.io` 仓库的 `main` 分支。
-
-1. 创建 Fine-grained personal access token，只给 `hooleeas/hooleeas.github.io` 仓库 **Contents: Read and write** 权限。
-2. 在源码仓库的 **Settings → Secrets and variables → Actions** 中添加 secret，名称设为 `PAGES_DEPLOY_TOKEN`，值填写刚创建的 Token。
-3. 在 `hooleeas/hooleeas.github.io` 仓库打开 **Settings → Pages → Build and deployment → Source**，选择 **Deploy from a branch**，分支选择 `main`，目录选择 `/(root)`。
-4. 向源码仓库的 `main` 或 `master` 推送更改，或在其 Actions 页面手动运行 **Build and publish site**。
-
-工作流需要 `PAGES_DEPLOY_TOKEN` 才能写入独立的 Pages 仓库；不要把 Token 写进源码。手动发布时，运行 `npm run build`，将 `dist/` 中的内容推送到 Pages 仓库 `main` 分支即可。
-
-### Cloudflare Pages：连接构建产物仓库
-
-如果连接 `hooleeas/hooleeas.github.io`，仓库根目录已经是构建产物（包含 `index.html`、`_astro/` 等文件）。框架预设选择 **None**，构建命令、构建输出目录和根目录都留空。此配置已在本项目实测通过。产物推送工作流更新 `main` 分支后，Cloudflare 会自动部署更新后的文件。
-
-### Cloudflare Pages：从源码仓库构建
-
-也可以直接连接源码仓库：
+### Cloudflare Pages：构建此演示仓库
 
 1. 在 Cloudflare 控制台进入 **Workers & Pages → Create application → Pages → Connect to Git**。
-2. 连接 GitHub，选择源码仓库和部署分支。
+2. 连接 GitHub，选择公开的 `hooleeas/astro-blog` 仓库和 `main` 分支。
 3. 框架预设选择 **Astro**，构建命令填写 `npm run build`，构建输出目录填写 `dist`，根目录留空。
 4. 点击 **Save and Deploy**。之后推送到所选分支时，Cloudflare 会自动构建并部署。
+
+此仓库是公开的演示源码。独立的 `hooleeas/hooleeas.github.io` 仓库留作站点所有者的个人网站，不会被此演示项目修改。
 
 ### Cloudflare Pages：只上传 `dist/`（Direct Upload）
 

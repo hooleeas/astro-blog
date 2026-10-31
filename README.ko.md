@@ -102,29 +102,14 @@ src/content/posts/en/
 
 빌드 결과물은 `dist/`에 생성됩니다. 이 프로젝트는 루트 도메인 `https://hooleeas.github.io`를 사용하므로 `base`가 `/`로 설정되어 있습니다.
 
-### GitHub Pages: 빌드 결과물만 게시
-
-소스 저장소는 비공개로 유지할 수 있습니다. `.github/workflows/deploy.yml`은 사이트를 빌드하고 `dist/` 내용만 `hooleeas/hooleeas.github.io` 저장소의 `main` 브랜치로 push합니다.
-
-1. Fine-grained personal access token을 만들고 `hooleeas/hooleeas.github.io` 저장소에만 **Contents: Read and write** 권한을 부여합니다.
-2. 소스 저장소의 **Settings → Secrets and variables → Actions**에서 `PAGES_DEPLOY_TOKEN` secret을 추가합니다.
-3. `hooleeas/hooleeas.github.io` 저장소의 **Settings → Pages → Build and deployment → Source**에서 **Deploy from a branch**를 선택하고 브랜치는 `main`, 폴더는 `/(root)`로 설정합니다.
-4. 소스 저장소의 `main` 또는 `master`에 변경 사항을 push하거나 Actions 탭에서 **Build and publish site**를 수동 실행합니다.
-
-워크플로가 별도의 Pages 저장소에 쓰려면 `PAGES_DEPLOY_TOKEN` secret이 필요합니다. Token을 소스 파일에 넣지 마세요. 수동으로 게시하려면 `npm run build`를 실행한 뒤 `dist/` 내용을 Pages 저장소의 `main` 브랜치로 push하면 됩니다.
-
-### Cloudflare Pages: 빌드 결과물 저장소 연결
-
-`hooleeas/hooleeas.github.io`를 연결하면 저장소 루트에 이미 빌드 결과물(`index.html`, `_astro/` 등)이 있습니다. 프레임워크 프리셋은 **None**으로 선택하고 빌드 명령, 빌드 출력 디렉터리, 루트 디렉터리를 모두 비워 둡니다. 이 설정은 이 프로젝트에서 테스트했습니다. 결과물 push 워크플로가 `main`을 업데이트하면 Cloudflare가 변경된 파일을 자동 배포합니다.
-
-### Cloudflare Pages: 소스 저장소에서 빌드
-
-소스 저장소를 직접 연결할 수도 있습니다.
+### Cloudflare Pages: 이 데모 저장소 빌드
 
 1. Cloudflare 대시보드에서 **Workers & Pages → Create application → Pages → Connect to Git**으로 이동합니다.
-2. GitHub를 연결한 다음 소스 저장소와 배포 브랜치를 선택합니다.
+2. GitHub를 연결한 다음 공개된 `hooleeas/astro-blog` 저장소와 `main` 브랜치를 선택합니다.
 3. 프레임워크 프리셋은 **Astro**, 빌드 명령은 `npm run build`, 빌드 출력 디렉터리는 `dist`로 설정합니다. 루트 디렉터리는 비워 둡니다.
 4. **Save and Deploy**를 선택합니다. 이후 선택한 브랜치에 push하면 Cloudflare가 자동으로 빌드하고 배포합니다.
+
+이 저장소는 공개 데모 소스입니다. 별도의 `hooleeas/hooleeas.github.io` 저장소는 소유자의 개인 사이트용으로 남겨 두며, 이 데모에서 수정하지 않습니다.
 
 ### Cloudflare Pages: `dist/`만 업로드 (Direct Upload)
 

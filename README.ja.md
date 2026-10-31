@@ -102,29 +102,14 @@ src/content/posts/en/
 
 ビルド成果物は `dist/` に出力されます。このプロジェクトはルートドメイン `https://hooleeas.github.io` を使うため、`base` は `/` に設定されています。
 
-### GitHub Pages：ビルド成果物のみを公開
-
-ソースリポジトリは非公開のままにできます。`.github/workflows/deploy.yml` はサイトをビルドし、`dist/` の内容のみを `hooleeas/hooleeas.github.io` リポジトリの `main` ブランチに push します。
-
-1. Fine-grained personal access token を作成し、`hooleeas/hooleeas.github.io` リポジトリだけに **Contents: Read and write** 権限を付与します。
-2. ソースリポジトリの **Settings → Secrets and variables → Actions** で secret `PAGES_DEPLOY_TOKEN` を追加します。
-3. `hooleeas/hooleeas.github.io` の **Settings → Pages → Build and deployment → Source** で **Deploy from a branch** を選び、ブランチを `main`、フォルダーを `/(root)` に設定します。
-4. ソースリポジトリの `main` または `master` に push するか、Actions タブから **Build and publish site** を手動実行します。
-
-ワークフローが Pages リポジトリへ書き込むには `PAGES_DEPLOY_TOKEN` secret が必要です。Token をソースコードに含めないでください。手動で公開する場合は `npm run build` を実行し、`dist/` の中身を Pages リポジトリの `main` ブランチに push します。
-
-### Cloudflare Pages：ビルド成果物リポジトリを接続
-
-`hooleeas/hooleeas.github.io` を接続する場合、リポジトリのルートにすでにビルド成果物（`index.html`、`_astro/` など）があります。フレームワークプリセットは **None** を選択し、ビルドコマンド、ビルド出力ディレクトリ、ルートディレクトリはすべて空欄のままにします。この設定は本プロジェクトで動作確認済みです。成果物を push するワークフローが `main` を更新すると、Cloudflare が自動でデプロイします。
-
-### Cloudflare Pages：ソースリポジトリからビルド
-
-ソースリポジトリを直接接続することもできます。
+### Cloudflare Pages：このデモリポジトリをビルド
 
 1. Cloudflare ダッシュボードで **Workers & Pages → Create application → Pages → Connect to Git** を開きます。
-2. GitHub を接続し、ソースリポジトリとデプロイするブランチを選択します。
+2. GitHub を接続し、公開されている `hooleeas/astro-blog` リポジトリと `main` ブランチを選択します。
 3. フレームワークプリセットを **Astro**、ビルドコマンドを `npm run build`、ビルド出力ディレクトリを `dist` に設定します。ルートディレクトリは空欄にします。
 4. **Save and Deploy** を選択します。以後、選択したブランチへの push 時に Cloudflare が自動でビルド・デプロイします。
+
+このリポジトリは公開デモ用のソースです。別の `hooleeas/hooleeas.github.io` リポジトリは所有者の個人サイト用に確保されており、このデモから変更されません。
 
 ### Cloudflare Pages：`dist/` のみをアップロード（Direct Upload）
 

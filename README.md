@@ -102,27 +102,14 @@ Run `astro new page tags` to create `src/pages/tags.astro` from the page templat
 
 The site builds to `dist/`. This project is configured for the root domain `https://hooleeas.github.io`, so it uses `/` as its base path.
 
-### GitHub Pages: publish build output only
-
-The source repository can remain private. The workflow in `.github/workflows/deploy.yml` builds the site and pushes only the contents of `dist/` to `hooleeas/hooleeas.github.io` on its `main` branch.
-
-1. Create a fine-grained GitHub personal access token that grants **Contents: Read and write** access only to `hooleeas/hooleeas.github.io`.
-2. In this source repository, add the token under **Settings → Secrets and variables → Actions** with the name `PAGES_DEPLOY_TOKEN`.
-3. In `hooleeas/hooleeas.github.io`, set **Settings → Pages → Build and deployment → Source** to **Deploy from a branch**, then select `main` and `/(root)`.
-4. Push a change to `main` or `master` in the source repository, or manually run **Build and publish site** from its Actions tab.
-
-### Cloudflare Pages: connect the build-output repository
-
-If you connect `hooleeas/hooleeas.github.io`, its repository root already contains the built site (`index.html`, `_astro/`, and other assets). Select **None** for the framework preset and leave the build command, build output directory, and root directory blank. This was tested with this repository. When the artifact-push workflow updates `main`, Cloudflare will deploy the updated files.
-
-### Cloudflare Pages: build from the source repository
-
-Alternatively, connect the source repository directly:
+### Cloudflare Pages: build this demo repository
 
 1. In Cloudflare, go to **Workers & Pages → Create application → Pages → Connect to Git**.
-2. Connect GitHub and select the source repository and branch.
+2. Connect GitHub and select the public `hooleeas/astro-blog` repository and the `main` branch.
 3. Set the framework preset to **Astro**, the build command to `npm run build`, and the build output directory to `dist`. Leave the root directory blank.
 4. Select **Save and Deploy**. Later pushes to the selected branch trigger automatic builds and deployments.
+
+This repository is the public demo source. The separate `hooleeas/hooleeas.github.io` repository is reserved for the owner's personal site and is not modified by this demo.
 
 ### Cloudflare Pages: upload only `dist/` (Direct Upload)
 
