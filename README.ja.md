@@ -18,8 +18,8 @@ Astro で構築した多言語対応の静的ブログです。記事は Markdow
 Node.js 22 と npm が必要です。リポジトリをクローンして依存関係をインストールします。
 
 ```bash
-git clone <リポジトリの URL>
-cd <プロジェクトディレクトリ>
+git clone https://github.com/hooleeas/astro-blog.git
+cd astro-blog
 npm install
 npm run dev
 ```

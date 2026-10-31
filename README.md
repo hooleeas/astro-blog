@@ -18,8 +18,8 @@ A multilingual static blog built with Astro. Write posts in Markdown and manage 
 Requires Node.js 22 and npm. Clone the project and install dependencies:
 
 ```bash
-git clone <repository-url>
-cd <project-directory>
+git clone https://github.com/hooleeas/astro-blog.git
+cd astro-blog
 npm install
 npm run dev
 ```

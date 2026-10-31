@@ -18,8 +18,8 @@
 需要 Node.js 22 與 npm。複製專案並安裝相依套件：
 
 ```bash
-git clone <儲存庫網址>
-cd <專案目錄>
+git clone https://github.com/hooleeas/astro-blog.git
+cd astro-blog
 npm install
 npm run dev
 ```

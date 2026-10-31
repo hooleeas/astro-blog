@@ -18,8 +18,8 @@ Astro로 만든 다국어 정적 블로그입니다. 글은 Markdown으로 작�
 Node.js 22와 npm이 필요합니다. 저장소를 복제하고 의존성을 설치하세요.
 
 ```bash
-git clone <저장소 URL>
-cd <프로젝트 디렉터리>
+git clone https://github.com/hooleeas/astro-blog.git
+cd astro-blog
 npm install
 npm run dev
 ```
