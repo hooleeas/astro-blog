@@ -1,0 +1,30 @@
+---
+type Props = {
+  items: {
+    name: string;
+    color: string;
+    labelColor: string;
+    icon: string;
+    href: string;
+  }[];
+  hidden?: boolean;
+};
+
+import { withBase } from "../lib/site-path";
+
+const { items, hidden = false } = Astro.props;
+---
+
+<div class="creativity-set" aria-hidden={hidden ? "true" : undefined}>
+  {items.map((item) =>
+    item.href ? (
+      <a class="creativity-logo" href={withBase(item.href)} target="_blank" rel="noopener noreferrer" style={`--logo-bg:${item.color};--logo-label:${item.labelColor}`} aria-label={item.name}>
+        <img src={withBase(item.icon)} alt="" loading="eager" decoding="async" />
+      </a>
+    ) : (
+      <div class="creativity-logo" role="img" aria-label={item.name} style={`--logo-bg:${item.color};--logo-label:${item.labelColor}`}>
+        <img src={withBase(item.icon)} alt="" loading="eager" decoding="async" />
+      </div>
+    ),
+  )}
+</div>

@@ -1,0 +1,608 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteContent } from "../lib/parse-jsonc";
+import { getCollection, type CollectionEntry } from "astro:content";
+import {
+  assertUniquePostTranslations,
+  getPostLanguage,
+  getPostHref,
+  getPostTranslationGroup,
+} from "../lib/posts";
+import { withBase } from "../lib/site-path";
+
+type Post = CollectionEntry<"posts">;
+const posts: Post[] = (await getCollection("posts", ({ data }: Post) => !data.draft)).sort(
+  (a: Post, b: Post) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+assertUniquePostTranslations(posts);
+const categories = [...new Set(posts.map((post) => post.data.category))].sort();
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))].sort();
+const pageTranslations = {
+  "zh-Hans": {
+    archiveTitle: siteContent.pages.archive.pageTitle["zh-Hans"],
+    archiveIntroduction: siteContent.pages.archive.pageSubtitle["zh-Hans"],
+    archiveSearchLabel: "搜索文章",
+    archiveSearchPlaceholder: "搜索标题、摘要或正文",
+    archiveCategories: "分类",
+    archiveTags: "标签",
+    archiveFilters: "文章筛选",
+    archiveList: "文章列表",
+    archiveCover: "封面图片",
+    archiveAll: "全部",
+    archiveResults: "篇文章",
+    archiveReset: "清除筛选",
+    archiveNoResults: "没有找到符合条件的文章。",
+  },
+  "zh-Hant": {
+    archiveTitle: siteContent.pages.archive.pageTitle["zh-Hant"],
+    archiveIntroduction: siteContent.pages.archive.pageSubtitle["zh-Hant"],
+    archiveSearchLabel: "搜尋文章",
+    archiveSearchPlaceholder: "搜尋標題、摘要或內文",
+    archiveCategories: "分類",
+    archiveTags: "標籤",
+    archiveFilters: "文章篩選",
+    archiveList: "文章列表",
+    archiveCover: "封面圖片",
+    archiveAll: "全部",
+    archiveResults: "篇文章",
+    archiveReset: "清除篩選",
+    archiveNoResults: "找不到符合條件的文章。",
+  },
+  ja: {
+    archiveTitle: siteContent.pages.archive.pageTitle.ja,
+    archiveIntroduction: siteContent.pages.archive.pageSubtitle.ja,
+    archiveSearchLabel: "記事を検索",
+    archiveSearchPlaceholder: "タイトル、概要、本文を検索",
+    archiveCategories: "カテゴリー",
+    archiveTags: "タグ",
+    archiveFilters: "記事の絞り込み",
+    archiveList: "記事一覧",
+    archiveCover: "カバー画像",
+    archiveAll: "すべて",
+    archiveResults: "件の記事",
+    archiveReset: "絞り込みを解除",
+    archiveNoResults: "条件に一致する記事が見つかりません。",
+  },
+  ko: {
+    archiveTitle: siteContent.pages.archive.pageTitle.ko,
+    archiveIntroduction: siteContent.pages.archive.pageSubtitle.ko,
+    archiveSearchLabel: "글 검색",
+    archiveSearchPlaceholder: "제목, 요약 또는 본문 검색",
+    archiveCategories: "카테고리",
+    archiveTags: "태그",
+    archiveFilters: "글 필터",
+    archiveList: "글 목록",
+    archiveCover: "표지 이미지",
+    archiveAll: "전체",
+    archiveResults: "개의 글",
+    archiveReset: "필터 지우기",
+    archiveNoResults: "조건에 맞는 글을 찾을 수 없습니다.",
+  },
+  en: {
+    archiveTitle: siteContent.pages.archive.pageTitle.en,
+    archiveIntroduction: siteContent.pages.archive.pageSubtitle.en,
+    archiveSearchLabel: "Search articles",
+    archiveSearchPlaceholder: "Search titles, summaries, or content",
+    archiveCategories: "Categories",
+    archiveTags: "Tags",
+    archiveFilters: "Article filters",
+    archiveList: "Article list",
+    archiveCover: "Cover image",
+    archiveAll: "All",
+    archiveResults: "articles",
+    archiveReset: "Clear filters",
+    archiveNoResults: "No articles match your filters.",
+  },
+};
+---
+
+<BaseLayout
+  title={siteContent.pages.archive.pageTitle["zh-Hans"]}
+  description={siteContent.pages.archive.pageSubtitle["zh-Hans"]}
+  image={withBase("/og/pages/archive.png?v=10")}
+  imageAlt={siteContent.pages.archive.pageTitle["zh-Hans"]}
+  imageWidth={1800}
+  imageHeight={600}
+  pageTranslations={pageTranslations}
+  titleTranslationKey="archiveTitle"
+>
+  <div class="container archive-page">
+    <header class="archive-heading content-page-heading">
+      <h1 data-i18n="archiveTitle">{siteContent.pages.archive.pageTitle["zh-Hans"]}</h1>
+      <p data-i18n="archiveIntroduction">{siteContent.pages.archive.pageSubtitle["zh-Hans"]}</p>
+    </header>
+
+    <section class="archive-controls" aria-label="文章筛选" data-i18n-aria="archiveFilters">
+      <label class="archive-search">
+        <span class="archive-search-icon" aria-hidden="true">⌕</span>
+        <span class="visually-hidden" data-i18n="archiveSearchLabel">搜索文章</span>
+        <input
+          type="search"
+          data-archive-search
+          placeholder="搜索标题、摘要或正文"
+          data-i18n-placeholder="archiveSearchPlaceholder"
+        />
+        <kbd>⌘ K</kbd>
+      </label>
+
+      <div class="archive-filters">
+        <div class="archive-filter-group" aria-label="分类" data-i18n-aria="archiveCategories">
+          <span class="archive-filter-label" data-i18n="archiveCategories">分类</span>
+          <div class="archive-filter-options" data-filter-group="category">
+            <button class="archive-filter-chip active" type="button" data-filter-value="all" data-i18n="archiveAll">全部</button>
+            {categories.map((category) => (
+              <button class="archive-filter-chip" type="button" data-filter-value={category} data-category-option>{category}</button>
+            ))}
+          </div>
+        </div>
+        <div class="archive-filter-group" aria-label="标签" data-i18n-aria="archiveTags">
+          <span class="archive-filter-label" data-i18n="archiveTags">标签</span>
+          <div class="archive-filter-options" data-filter-group="tag">
+            <button class="archive-filter-chip active" type="button" data-filter-value="all" data-i18n="archiveAll">全部</button>
+            {tags.map((tag) => (
+              <button class="archive-filter-chip" type="button" data-filter-value={tag} data-tag-option>{tag}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="archive-results-line">
+      <span><strong data-result-count>{posts.length}</strong> <span data-i18n="archiveResults">篇文章</span></span>
+      <button class="archive-reset" type="button" data-archive-reset data-i18n="archiveReset" hidden>清除筛选</button>
+    </div>
+
+    <section class="archive-list" data-archive-list aria-label="文章列表" data-i18n-aria="archiveList">
+      {posts.map((post) => (
+        <a
+          class="archive-row"
+          href={withBase(getPostHref(post, posts))}
+          data-post-href={withBase(getPostHref(post, posts))}
+          data-archive-item
+          data-post-translation-group={getPostTranslationGroup(post)}
+          data-post-language={getPostLanguage(post)}
+          data-category={post.data.category}
+          data-tags={post.data.tags.join("|")}
+          data-search={`${post.data.title} ${post.data.subtitle} ${post.data.category} ${post.data.tags.join(" ")} ${post.body}`}
+        >
+          <div class="archive-cover" aria-hidden="true">
+            {post.data.cover
+              ? <img src={withBase(post.data.cover)} alt="" loading="lazy" decoding="async" />
+              : <span data-i18n="archiveCover">封面图片</span>}
+          </div>
+          <div class="archive-row-content">
+            <time class="archive-date" datetime={post.data.pubDate.toISOString()}>
+              {post.data.pubDate.toISOString().slice(0, 10)}
+            </time>
+            <span class="archive-title">{post.data.title}</span>
+            <p class="archive-description">{post.data.subtitle}</p>
+            <div class="archive-row-meta">
+              <span class="archive-category">{post.data.category}</span>
+              {post.data.tags.map((tag: string) => <span class="archive-tag">{tag}</span>)}
+            </div>
+          </div>
+        </a>
+      ))}
+      <p class="archive-empty" data-archive-empty data-i18n="archiveNoResults" hidden>
+        没有找到符合条件的文章。
+      </p>
+    </section>
+  </div>
+
+  <script is:inline data-astro-rerun>
+    (() => {
+      window.archivePageController?.abort();
+      const controller = new AbortController();
+      window.archivePageController = controller;
+      const options = { signal: controller.signal };
+      const search = document.querySelector("[data-archive-search]");
+      const items = [...document.querySelectorAll("[data-archive-item]")];
+      const categoryGroup = document.querySelector('[data-filter-group="category"]');
+      const tagGroup = document.querySelector('[data-filter-group="tag"]');
+      const resultCount = document.querySelector("[data-result-count]");
+      const emptyState = document.querySelector("[data-archive-empty]");
+      const resetButton = document.querySelector("[data-archive-reset]");
+      let category = "all";
+      const selectedTags = new Set();
+      let selectedLanguage = localStorage.getItem("language-preference") || "zh-Hans";
+      let selectedLanguageItems = new Set();
+      const postGroups = new Map();
+      items.forEach((item) => {
+        const key = item.dataset.postTranslationGroup;
+        if (!postGroups.has(key)) postGroups.set(key, []);
+        postGroups.get(key).push(item);
+      });
+
+      const updateLanguageItems = () => {
+        selectedLanguageItems = new Set();
+        postGroups.forEach((group) => {
+          const selected =
+            group.find((item) => item.dataset.postLanguage === selectedLanguage) ??
+            group.find((item) => item.dataset.postLanguage === "zh-Hans") ??
+            group.find((item) => item.dataset.postLanguage === "zh") ??
+            group[0];
+          if (selected) selectedLanguageItems.add(selected);
+        });
+        const categories = new Set([...selectedLanguageItems].map((item) => item.dataset.category));
+        categoryGroup.querySelectorAll("[data-category-option]").forEach((button) => {
+          button.hidden = !categories.has(button.dataset.filterValue);
+        });
+        if (category !== "all" && !categories.has(category)) {
+          category = "all";
+          setCategoryFilter(category);
+        }
+      };
+
+      const filterItems = () => {
+        const query = search.value.trim().toLocaleLowerCase();
+        let visibleCount = 0;
+        items.forEach((item) => {
+          const matchesCategory = category === "all" || item.dataset.category === category;
+          const itemTags = item.dataset.tags.split("|");
+          const matchesTag = selectedTags.size === 0 || [...selectedTags].some((tag) => itemTags.includes(tag));
+          const matchesQuery = !query || item.dataset.search.toLocaleLowerCase().includes(query);
+          const visible = selectedLanguageItems.has(item) && matchesCategory && matchesTag && matchesQuery;
+          item.hidden = !visible;
+          if (visible) visibleCount += 1;
+        });
+        resultCount.textContent = String(visibleCount);
+        emptyState.hidden = visibleCount > 0;
+        resetButton.hidden = category === "all" && selectedTags.size === 0 && !query;
+      };
+
+      const setCategoryFilter = (value) => {
+        categoryGroup.querySelectorAll(".archive-filter-chip").forEach((button) => {
+          const active = button.dataset.filterValue === value;
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+      };
+
+      const updateTagOptions = () => {
+        const availableTags = new Set(
+          [...selectedLanguageItems]
+            .filter((item) => category === "all" || item.dataset.category === category)
+            .flatMap((item) => item.dataset.tags.split("|").filter(Boolean)),
+        );
+        tagGroup.querySelectorAll("[data-tag-option]").forEach((button) => {
+          const available = availableTags.has(button.dataset.filterValue);
+          button.hidden = !available;
+          if (!available) selectedTags.delete(button.dataset.filterValue);
+        });
+        const allTagsButton = tagGroup.querySelector('[data-filter-value="all"]');
+        const activeTags = selectedTags.size === 0 ? ["all"] : [...selectedTags];
+        tagGroup.querySelectorAll(".archive-filter-chip").forEach((button) => {
+          const active = activeTags.includes(button.dataset.filterValue);
+          button.classList.toggle("active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        allTagsButton.setAttribute("aria-pressed", String(selectedTags.size === 0));
+      };
+
+      categoryGroup.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-filter-value]");
+        if (!button || !categoryGroup.contains(button)) return;
+        category = button.dataset.filterValue;
+        setCategoryFilter(category);
+        updateTagOptions();
+        filterItems();
+      }, options);
+
+      tagGroup.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-filter-value]");
+        if (!button || !tagGroup.contains(button)) return;
+        const value = button.dataset.filterValue;
+        if (value === "all") {
+          selectedTags.clear();
+        } else if (selectedTags.has(value)) {
+          selectedTags.delete(value);
+        } else {
+          selectedTags.add(value);
+        }
+        updateTagOptions();
+        filterItems();
+      }, options);
+
+      search.addEventListener("input", filterItems, options);
+      resetButton.addEventListener("click", () => {
+        category = "all";
+        selectedTags.clear();
+        search.value = "";
+        setCategoryFilter(category);
+        updateTagOptions();
+        filterItems();
+      }, options);
+
+      document.addEventListener("keydown", (event) => {
+        if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+          event.preventDefault();
+          search.focus();
+        }
+      }, options);
+
+      document.addEventListener("site-language-change", (event) => {
+        selectedLanguage = event.detail?.language || "zh-Hans";
+        selectedTags.clear();
+        updateLanguageItems();
+        updateTagOptions();
+        filterItems();
+      }, options);
+
+      setCategoryFilter(category);
+      updateLanguageItems();
+      updateTagOptions();
+      filterItems();
+    })();
+  </script>
+</BaseLayout>
+
+<style>
+  .archive-page {
+    padding-top: 28px;
+    padding-bottom: 100px;
+  }
+
+  .archive-heading {
+    margin-bottom: 34px;
+  }
+
+  .archive-controls {
+    margin-bottom: 22px;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+  }
+
+  .archive-search {
+    display: flex;
+    min-height: 48px;
+    align-items: center;
+    gap: 12px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--bg);
+    color: var(--muted);
+  }
+
+  .archive-search:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
+  .archive-search-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .archive-search input {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+  }
+
+  .archive-search input,
+  .archive-search input::placeholder {
+    transition: color 760ms cubic-bezier(.22,.61,.36,1);
+  }
+  .archive-search input::placeholder { color: var(--muted); }
+  .archive-search kbd {
+    flex: 0 0 auto;
+    padding: 2px 6px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    font: 0.72rem ui-monospace, monospace;
+  }
+
+  .archive-filters {
+    display: grid;
+    gap: 15px;
+    margin-top: 18px;
+  }
+
+  .archive-filter-group {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+  }
+
+  .archive-filter-label {
+    padding-top: 6px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 650;
+  }
+
+  .archive-filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .archive-filter-chip {
+    height: 32px;
+    padding: 4px 11px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.82rem;
+    line-height: 1.3;
+    transition: color 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+  }
+  .archive-filter-chip[hidden] { display: none; }
+
+  .archive-filter-chip:hover {
+    border-color: var(--line);
+    color: var(--text);
+  }
+
+  .archive-filter-chip.active {
+    border-color: color-mix(in srgb, var(--accent) 24%, transparent);
+    background: color-mix(in srgb, var(--accent) 11%, var(--surface));
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .archive-results-line {
+    display: flex;
+    min-height: 32px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 2px 10px;
+    color: var(--muted);
+    font-size: 0.84rem;
+  }
+
+  .archive-results-line strong { color: var(--text); }
+  .archive-reset {
+    padding: 4px 0 4px 12px;
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .archive-list {
+    display: grid;
+    gap: 14px;
+    border-top: 0;
+  }
+
+  .archive-page .archive-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+    align-items: center;
+    min-width: 0;
+    gap: 20px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--surface);
+    transition: transform 0.12s ease, background-color 0.12s ease;
+  }
+
+  .archive-page .archive-row[hidden] { display: none; }
+  .archive-page .archive-row:hover { color: var(--text); }
+  .archive-page .archive-row:active {
+    transform: scale(0.99);
+    background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+  }
+  .archive-page .archive-cover {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    margin-bottom: 0;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 16%, var(--surface)), var(--surface));
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .archive-page .archive-row-content {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .archive-page .archive-date {
+    display: block;
+    margin: 0 0 5px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .archive-page .archive-title {
+    display: block;
+    color: var(--text);
+    font-size: 1.08rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+  }
+
+  .archive-page .archive-title:hover { color: var(--text); }
+  .archive-page .archive-description {
+    margin: 5px 0 10px;
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.65;
+  }
+
+  .archive-page .archive-row-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .archive-page .archive-category,
+  .archive-page .archive-tag {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--line) 58%, transparent);
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.5;
+  }
+
+  .archive-page .archive-category { color: var(--accent); }
+  .archive-page .archive-empty {
+    grid-column: 1 / -1;
+    margin: 0;
+    padding: 42px 12px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 680px) {
+    .archive-page { padding-top: 22px; padding-bottom: 68px; }
+    .archive-heading { margin-bottom: 24px; }
+    .archive-controls { padding: 14px; }
+    .archive-filter-group { grid-template-columns: 1fr; gap: 5px; }
+    .archive-filter-label { padding-top: 0; }
+    .archive-list { gap: 12px; }
+    .archive-page .archive-row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+    .archive-page .archive-cover { border-radius: 8px; font-size: 0.68rem; }
+    .archive-page .archive-date { margin-bottom: 4px; font-size: 0.72rem; }
+    .archive-page .archive-title { font-size: 0.96rem; }
+    .archive-page .archive-description { margin: 4px 0 7px; font-size: 0.8rem; }
+    .archive-search kbd { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .archive-filter-chip { transition: none; }
+  }
+</style>

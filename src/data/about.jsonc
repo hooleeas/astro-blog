@@ -1,0 +1,85 @@
+{
+  "pageTitle": {
+    "zh-Hans": "关于 Hooleeas",
+    "zh-Hant": "關於 Hooleeas",
+    "ja": "Hooleeas について",
+    "ko": "Hooleeas 소개",
+    "en": "About Hooleeas"
+  },
+  "avatar": {
+    "src": "/images/avatar.webp",
+    "alt": {
+      "zh-Hans": "Hooleeas 的头像",
+      "zh-Hant": "Hooleeas 的頭像",
+      "ja": "Hooleeas のプロフィール画像",
+      "ko": "Hooleeas 프로필 사진",
+      "en": "Hooleeas's avatar"
+    }
+  },
+
+  "introduction": {
+    "greeting": {
+      "zh-Hans": "你好，我是 Hooleeas",
+      "zh-Hant": "你好，我是 Hooleeas",
+      "ja": "こんにちは、Hooleeas です",
+      "ko": "안녕하세요, Hooleeas입니다",
+      "en": "Hello, I'm Hooleeas"
+    },
+    "detail": {
+      "zh-Hans": "一名独立开发者。乐于探索技术，把实践经验整理成文章，分享给或许需要帮助的你。",
+      "zh-Hant": "一名獨立開發者，喜歡探索技術，並將實務經驗整理成文章，分享給可能需要幫助的你。",
+      "ja": "個人開発者として技術を探求し、実践で得た知見を記事にまとめ、必要としている方と共有しています。",
+      "ko": "기술을 탐구하고 실무 경험을 글로 정리해 필요한 분들과 나누는 독립 개발자입니다.",
+      "en": "I'm an independent developer who enjoys exploring technology and turning hands-on experience into articles to share with anyone who might find them helpful."
+    }
+  },
+
+  "contact": {
+    "title": {
+      "zh-Hans": "联系方式",
+      "zh-Hant": "聯絡方式",
+      "ja": "お問い合わせ",
+      "ko": "연락처",
+      "en": "Contact"
+    },
+    "contacts": [
+      {
+        "label": {
+          "zh-Hans": "邮箱 (iMessage)",
+          "zh-Hant": "電子郵件 (iMessage)",
+          "ja": "メール (iMessage)",
+          "ko": "이메일 (iMessage)",
+          "en": "Email (iMessage)"
+        },
+        "value": "G@hooleeas.com",
+        "href": "mailto:G@hooleeas.com"
+      }
+    ]
+  },
+
+  "skillsTitle": {
+    "zh-Hans": "我擅长的领域",
+    "zh-Hant": "我擅長的領域",
+    "ja": "得意な分野",
+    "ko": "전문 분야",
+    "en": "Skills & Expertise"
+  },
+  "logos": [
+    {"name": "Java", "color": "#fff", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/26ba17ce013ecde9afc8b373e2fc0b9d_1804318147854602575.jpg", "href": ""},
+    {"name": "Docker", "color": "#57b6e6", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/544b2d982fd5c4ede6630b29d86f3cae_7350393908531420887.png", "href": ""},
+    {"name": "Photoshop", "color": "#4082c3", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/4ce1d081b9b37b06e3714bee95e58589_1613929877388832041.png", "href": ""},
+    {"name": "Node", "color": "#333", "labelColor": "#fff", "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.1.1/img/svg/node-logo.svg", "href": ""},
+    {"name": "Webpack", "color": "#2e3a41", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/32dc115fbfd1340f919f0234725c6fb4_4060605986539473613.png", "href": ""},
+    {"name": "Pinia", "color": "#fff", "labelColor": "#17191c", "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.0.8/img/svg/pinia-logo.svg", "href": ""},
+    {"name": "Python", "color": "#fff", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/02c9c621414cc2ca41035d809a4154be_7912546659792951301.png", "href": ""},
+    {"name": "Vite", "color": "#937df7", "labelColor": "#17191c", "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.0.8/img/svg/vite-logo.svg", "href": ""},
+    {"name": "Flutter", "color": "#4499e4", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/b5aa93e0b61d8c9784cf76d14886ea46_4590392178423108088.png", "href": ""},
+    {"name": "Vue", "color": "#b8f0ae", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/cf23526f451784ff137f161b8fe18d5a_692393069314581413.png", "href": ""},
+    {"name": "React", "color": "#222", "labelColor": "#fff", "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K", "href": ""},
+    {"name": "CSS3", "color": "#2c51db", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/948767d87de7c5733b5f59b036d28b4b_3573026798828830876.png", "href": ""},
+    {"name": "JS", "color": "#f7cb4f", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/06216e7fddb6704b57cb89be309443f9_7269407781142156006.png", "href": ""},
+    {"name": "HTML", "color": "#e9572b", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/f774c401c8bc2707e1df1323bdc9e423_1926035231499717029.png", "href": ""},
+    {"name": "Git", "color": "#df5b40", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/fcc0dbbfe206b4436097a8362d64b558_6981541002497327189.webp", "href": ""},
+    {"name": "Apifox", "color": "#e65164", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/b61bc7287d7f7f89bd30079c7f04360e_2465770520170903938.png", "href": ""}
+  ]
+}

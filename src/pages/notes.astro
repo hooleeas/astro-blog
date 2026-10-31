@@ -1,0 +1,97 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteContent } from "../lib/parse-jsonc";
+import { withBase } from "../lib/site-path";
+
+const notes: CollectionEntry<"notes">[] = (await getCollection(
+  "notes",
+  (note: CollectionEntry<"notes">) => !note.data.draft,
+))
+  .sort(
+    (a: CollectionEntry<"notes">, b: CollectionEntry<"notes">) =>
+      b.data.date.valueOf() - a.data.date.valueOf(),
+  );
+const renderedNotes = await Promise.all(
+  notes.map(async (note) => ({
+    date: note.data.date,
+    Content: (await render(note)).Content,
+  })),
+);
+
+const pageTranslations = {
+  "zh-Hans": {
+    notesTitle: siteContent.pages.notes.pageTitle["zh-Hans"],
+    notesDescription: siteContent.pages.notes.pageSubtitle["zh-Hans"],
+    notesEmpty: "还没有随记",
+    notesEmptyHint: "新建一条 Markdown 随记，就会显示在这里。",
+    notesList: "随记列表",
+  },
+  "zh-Hant": {
+    notesTitle: siteContent.pages.notes.pageTitle["zh-Hant"],
+    notesDescription: siteContent.pages.notes.pageSubtitle["zh-Hant"],
+    notesEmpty: "還沒有隨記",
+    notesEmptyHint: "新增一則 Markdown 隨記，就會顯示在這裡。",
+    notesList: "隨記列表",
+  },
+  ja: {
+    notesTitle: siteContent.pages.notes.pageTitle.ja,
+    notesDescription: siteContent.pages.notes.pageSubtitle.ja,
+    notesEmpty: "メモはまだありません",
+    notesEmptyHint: "Markdown ファイルでメモを作成すると、ここに表示されます。",
+    notesList: "メモ一覧",
+  },
+  ko: {
+    notesTitle: siteContent.pages.notes.pageTitle.ko,
+    notesDescription: siteContent.pages.notes.pageSubtitle.ko,
+    notesEmpty: "아직 메모가 없습니다",
+    notesEmptyHint: "Markdown 메모를 만들면 여기에 표시됩니다.",
+    notesList: "메모 목록",
+  },
+  en: {
+    notesTitle: siteContent.pages.notes.pageTitle.en,
+    notesDescription: siteContent.pages.notes.pageSubtitle.en,
+    notesEmpty: "No notes yet",
+    notesEmptyHint: "Create a Markdown note and it will appear here.",
+    notesList: "Notes",
+  },
+};
+---
+
+<BaseLayout
+  title={siteContent.pages.notes.pageTitle["zh-Hans"]}
+  description={siteContent.pages.notes.pageSubtitle["zh-Hans"]}
+  image={withBase("/og/pages/notes.png?v=11")}
+  imageAlt={siteContent.pages.notes.pageTitle["zh-Hans"]}
+  imageWidth={1800}
+  imageHeight={600}
+  pageTranslations={pageTranslations}
+  titleTranslationKey="notesTitle"
+>
+  <div class="container notes-page">
+    <header class="content-page-heading notes-heading">
+      <h1 data-i18n="notesTitle">{siteContent.pages.notes.pageTitle["zh-Hans"]}</h1>
+      <p data-i18n="notesDescription">{siteContent.pages.notes.pageSubtitle["zh-Hans"]}</p>
+    </header>
+
+    {renderedNotes.length > 0 ? (
+      <section class="notes-list" aria-label="随记列表" data-i18n-aria="notesList">
+        {renderedNotes.map(({ date, Content }) => (
+          <article class="note-card">
+            <time class="note-date" datetime={date.toISOString()}>
+              {date.toISOString().slice(0, 10)}
+            </time>
+            <div class="note-content prose">
+              <Content />
+            </div>
+          </article>
+        ))}
+      </section>
+    ) : (
+      <div class="notes-empty" role="status">
+        <strong data-i18n="notesEmpty">还没有随记</strong>
+        <p data-i18n="notesEmptyHint">新建一条 Markdown 随记，就会显示在这里。</p>
+      </div>
+    )}
+  </div>
+</BaseLayout>

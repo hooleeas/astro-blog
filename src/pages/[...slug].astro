@@ -1,0 +1,303 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import aboutText from "../data/about.jsonc?raw";
+import appleText from "../data/apple.jsonc?raw";
+import servicesText from "../data/services.jsonc?raw";
+import { parseJsonc, postsContent, siteContent } from "../lib/parse-jsonc";
+import { withBase } from "../lib/site-path";
+import {
+  assertUniquePostTranslations,
+  getPostLanguage,
+  getPostHref,
+  getPostGroups,
+  type Post,
+} from "../lib/posts";
+
+export async function getStaticPaths() {
+  const posts: Post[] = await getCollection("posts", (post: Post) => !post.data.draft);
+  assertUniquePostTranslations(posts);
+  const articleRoutes = getPostGroups(posts).flatMap((group) => {
+    const href = getPostHref(group[0], posts);
+    const baseRoute = {
+      params: { slug: href.slice(1) },
+      props: { posts: group },
+    };
+    const languageRoutes = group.map((post) => {
+      const language = getPostLanguage(post);
+      return {
+        params: { slug: `${href.slice(1)}/${language.toLowerCase()}` },
+        props: { posts: group, shareLanguage: language },
+      };
+    });
+    return [baseRoute, ...languageRoutes];
+  });
+  const about = parseJsonc<{ pageTitle: Record<string, string>; introduction: { detail: Record<string, string> } }>(aboutText, "src/data/about.jsonc");
+  const apple = parseJsonc<{ pageTitle: Record<string, string>; pageSubtitle: Record<string, string> }>(appleText, "src/data/apple.jsonc");
+  const charity = parseJsonc<{ pageTitle: Record<string, string>; pageSubtitle: Record<string, string> }>(servicesText, "src/data/services.jsonc");
+  const sharePages: {
+    path: string;
+    title: string | Record<string, string>;
+    description: string | Record<string, string>;
+    imageSlug: string;
+    imageAlt: string | Record<string, string>;
+  }[] = [
+    {
+      path: "/",
+      title: siteContent.site.title,
+      description: siteContent.home.profile.description,
+      imageSlug: "home",
+      imageAlt: siteContent.site.title,
+    },
+    {
+      path: "/about",
+      title: about.pageTitle,
+      description: about.introduction.detail,
+      imageSlug: "about",
+      imageAlt: about.pageTitle,
+    },
+    {
+      path: "/apple",
+      title: apple.pageTitle,
+      description: apple.pageSubtitle,
+      imageSlug: "apple",
+      imageAlt: apple.pageTitle,
+    },
+    {
+      path: "/archive",
+      title: siteContent.pages.archive.pageTitle,
+      description: siteContent.pages.archive.pageSubtitle,
+      imageSlug: "archive",
+      imageAlt: siteContent.pages.archive.pageTitle,
+    },
+    {
+      path: "/notes",
+      title: siteContent.pages.notes.pageTitle,
+      description: siteContent.pages.notes.pageSubtitle,
+      imageSlug: "notes",
+      imageAlt: siteContent.pages.notes.pageTitle,
+    },
+    {
+      path: "/charity",
+      title: charity.pageTitle,
+      description: charity.pageSubtitle,
+      imageSlug: "charity",
+      imageAlt: charity.pageTitle,
+    },
+  ];
+  const pageRoutes = sharePages.flatMap((page) =>
+    siteContent.languages
+      .filter(({ enabled }) => enabled)
+      .map(({ code }) => ({
+        params: {
+          slug: `${page.path === "/" ? "" : `${page.path.slice(1)}/`}${code.toLowerCase()}`,
+        },
+        props: {
+          sharePage: {
+            ...page,
+            canonicalPath: page.path,
+            language: code,
+            title: typeof page.title === "string" ? page.title : page.title[code],
+            description: typeof page.description === "string" ? page.description : page.description[code],
+            image: withBase(`/og/pages/${code.toLowerCase()}/${page.imageSlug}.png?v=11`),
+            imageAlt: typeof page.imageAlt === "string" ? page.imageAlt : page.imageAlt[code],
+          },
+        },
+      })),
+  );
+  return [...articleRoutes, ...pageRoutes];
+}
+
+const { posts = [], shareLanguage, sharePage } = Astro.props as {
+  posts?: Post[];
+  shareLanguage?: string;
+  sharePage?: {
+    canonicalPath: string;
+    language: string;
+    title: string;
+    description: string;
+    image: string;
+    imageAlt: string;
+  };
+};
+const renderedPosts = await Promise.all(
+  posts.map(async (post) => ({
+    post,
+    language: getPostLanguage(post),
+    rendered: await render(post),
+  })),
+);
+const { articlePage } = postsContent;
+const donationQrCodes = articlePage.donationQrCodes;
+const defaultPost = (shareLanguage && posts.find(
+  (post) => getPostLanguage(post) === shareLanguage,
+)) ??
+  posts.find((post) => getPostLanguage(post) === "zh-Hans") ??
+  posts.find((post) => getPostLanguage(post) === "zh") ??
+  posts[0];
+const localizedMetadata = Object.fromEntries(
+  renderedPosts.map(({ post, language }) => [
+    language,
+    {
+      title: `${post.data.title} · Hooleeas Blog`,
+      description: post.data.subtitle,
+      image: withBase(`/og/posts/${language.toLowerCase()}${getPostHref(post, posts)}.png?v=13`),
+      imageAlt: post.data.title,
+    },
+  ]),
+);
+---
+
+{sharePage ? (
+  <BaseLayout
+    title={sharePage.canonicalPath === "/" ? sharePage.title : `${sharePage.title} · Hooleeas Blog`}
+    description={sharePage.description}
+    image={sharePage.image}
+    imageAlt={sharePage.imageAlt}
+    imageWidth={1800}
+    imageHeight={600}
+    initialLanguage={sharePage.language}
+    shareLanguage={sharePage.language}
+    canonicalPath={sharePage.canonicalPath}
+  >
+    <script is:inline define:vars={{ canonicalPath: withBase(sharePage.canonicalPath) }}>
+      window.location.replace(canonicalPath);
+    </script>
+  </BaseLayout>
+) : defaultPost && (
+<BaseLayout
+  title={`${defaultPost.data.title} · Hooleeas Blog`}
+  description={defaultPost.data.subtitle}
+  image={withBase(`/og/posts/${getPostLanguage(defaultPost).toLowerCase()}${getPostHref(defaultPost, posts)}.png?v=13`)}
+  imageAlt={defaultPost.data.title}
+  imageWidth={1800}
+  imageHeight={600}
+  pageType="article"
+  showArticleContentsToggle={articlePage.showTableOfContents}
+  initialLanguage={shareLanguage}
+  shareLanguage={shareLanguage}
+  canonicalPath={getPostHref(defaultPost, posts)}
+  localizedMetadata={localizedMetadata}
+>
+  <div class="container">
+    {renderedPosts.map(({ post, language, rendered }) => {
+      const { Content, headings } = rendered;
+      const { title, subtitle, pubDate, tags, category, cover } = post.data;
+      const articleTags: string[] = tags;
+      const articleHeadings: { depth: number; slug: string; text: string }[] = headings;
+      const dateLabel = pubDate.toISOString().slice(0, 10);
+      return (
+        <section class="localized-article" lang={language}>
+          <header class:list={["article-header-card", cover && "has-cover"]}>
+            <div class="article-header-copy">
+              <div class="eyebrow">{dateLabel} · {category}</div>
+              <h1 class="page-title">{title}</h1>
+              <p class="lead">{subtitle}</p>
+              <div class="article-tags" aria-label="文章标签" data-i18n-aria="articleTags">
+                {articleTags.map((tag) => <span>{tag}</span>)}
+              </div>
+            </div>
+            {cover && <img class="article-cover" src={withBase(cover)} alt={title} fetchpriority="high" />}
+          </header>
+
+          <div class="article-layout">
+            <article class="page article-main" lang={language}>
+              <div class="prose">
+                <Content />
+              </div>
+            </article>
+
+            {articlePage.showTableOfContents && articleHeadings.length > 0 && (
+              <aside class="article-toc">
+                <div class="toc-heading">
+                  <span class="toc-menu-icon">☰</span>
+                  <span data-i18n="articleContents">文章目录</span>
+                </div>
+                <nav class="toc" aria-label="文章目录" data-i18n-aria="articleContents">
+                  {articleHeadings.map((heading) => (
+                    <a
+                      href={"#" + heading.slug}
+                      data-depth={heading.depth}
+                      style={`padding-left: ${Math.max(0, heading.depth - 1) * 14}px`}
+                    >
+                      <span>{heading.text}</span>
+                    </a>
+                  ))}
+                </nav>
+              </aside>
+            )}
+          </div>
+
+          {articlePage.showShareCard && (
+          <aside class="article-share-card" aria-label="分享页面" data-i18n-aria="shareMenuLabel">
+            <div class="article-share-copy">
+              <span class="article-share-eyebrow" data-i18n="shareMenuHeading">分享此页面</span>
+              <h2 data-i18n="articleShareTitle">喜欢这篇文章？分享给更多人</h2>
+              <p data-i18n="articleShareDescription">扫码打开文章，或将链接分享给朋友。</p>
+              <div class="article-share-actions">
+                <a
+                  class="article-share-action"
+                  href="https://x.com/intent/post"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-share-x
+                  data-i18n="shareToX"
+                >分享到 X</a>
+                <button
+                  class="article-share-action"
+                  type="button"
+                  data-share-copy
+                  data-i18n="copyShareLink"
+                >复制链接</button>
+              </div>
+            </div>
+            <div class="article-share-qr">
+              <canvas
+                class="share-qr-code"
+                width="160"
+                height="160"
+                role="img"
+                aria-label="扫码访问此页面"
+                data-i18n-aria="shareQrCode"
+                data-share-qr-code
+              ></canvas>
+            </div>
+          </aside>
+          )}
+
+          {articlePage.showDonationCard && (
+            <aside class="article-donation-card">
+              <div class="article-donation-copy">
+                <h2 data-i18n="articleDonationTitle">支持作者</h2>
+                <p data-i18n="articleDonationDescription">如果这篇文章对你有所帮助，欢迎支持我的创作。</p>
+              </div>
+              <div class="article-donation-qr-list">
+                <div class="article-donation-qr-item">
+                  <div class:list={["article-donation-qr-placeholder", donationQrCodes.binance && "has-image"]}>
+                    {donationQrCodes.binance && <img src={withBase(donationQrCodes.binance)} alt="" />}
+                  </div>
+                  <span data-i18n="donationBinance">币安</span>
+                </div>
+                <div class="article-donation-qr-item">
+                  <div class:list={["article-donation-qr-placeholder", donationQrCodes.wechat && "has-image"]}>
+                    {donationQrCodes.wechat && <img src={withBase(donationQrCodes.wechat)} alt="" />}
+                  </div>
+                  <span data-i18n="donationWechat">微信</span>
+                </div>
+                <div class="article-donation-qr-item">
+                  <div class:list={["article-donation-qr-placeholder", donationQrCodes.alipay && "has-image"]}>
+                    {donationQrCodes.alipay && <img src={withBase(donationQrCodes.alipay)} alt="" />}
+                  </div>
+                  <span data-i18n="donationAlipay">支付宝</span>
+                </div>
+              </div>
+            </aside>
+          )}
+        </section>
+      );
+    })}
+  </div>
+
+  <script src="../scripts/toc.ts"></script>
+</BaseLayout>
+)}

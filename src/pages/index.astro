@@ -1,0 +1,736 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/PostCard.astro";
+import CreativityLogoSet from "../components/CreativityLogoSet.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { siteContent as content } from "../lib/parse-jsonc";
+import { withBase } from "../lib/site-path";
+import {
+  assertUniquePostTranslations,
+  getPostsByLanguage,
+} from "../lib/posts";
+type Post = CollectionEntry<"posts">;
+const posts: Post[] = (await getCollection("posts", ({ data }: Post) => !data.draft)).sort(
+  (a: Post, b: Post) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+assertUniquePostTranslations(posts);
+const { creativity, feature, profile } = content.home;
+const featureIsExternal = /^https?:\/\//i.test(feature.url);
+const creativityIsExternal = /^https?:\/\//i.test(creativity.url);
+const creativityItems = creativity.items;
+const sitePosts = getPostsByLanguage(posts, "zh-Hans");
+const countWords = (markdown: string) => {
+  const text = markdown
+    .replace(/^---[\s\S]*?---\s*/, "")
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/[`*_>#~|]/g, " ");
+  const chineseCharacters = text.match(/\p{Script=Han}/gu)?.length ?? 0;
+  const latinWords = text.match(/[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*/g)?.length ?? 0;
+  return chineseCharacters + latinWords;
+};
+const totalWords = sitePosts.reduce((total: number, post: Post) => {
+  if (typeof post.body !== "string") {
+    throw new Error(`Article body is missing for "${post.id}".`);
+  }
+  return total + countWords(post.body);
+}, 0);
+const establishedAt = new Date(`${content.site.establishedAt}T00:00:00Z`);
+const getDaysOnline = (date: Date) =>
+  Math.max(1, Math.floor((date.getTime() - establishedAt.getTime()) / 86_400_000) + 1);
+const creativityRows =
+  creativityItems.length >= 16
+    ? [
+        creativityItems.slice(0, Math.ceil(creativityItems.length / 2)),
+        creativityItems.slice(Math.ceil(creativityItems.length / 2)),
+      ]
+    : [creativityItems];
+const hasVisibleVisualCards = creativity.visible || feature.visible;
+---
+
+<BaseLayout image={withBase("/og/pages/home.png?v=11")} imageAlt={content.site.title} imageWidth={1800} imageHeight={600}>
+  <div class="container home-container">
+    <section class:list={[
+      "home-visual",
+      !hasVisibleVisualCards && "home-visual-empty",
+      feature.visible !== creativity.visible && "home-visual-single-card",
+    ]}>
+      {creativity.visible && <div
+        class:list={[
+          "visual-notes",
+          "visual-creativity",
+          `visual-creativity-${creativity.carouselMode}`,
+          !creativity.showOnMobile && "home-card-mobile-hidden",
+        ]}
+        data-creativity-url={creativity.url ? withBase(creativity.url) : undefined}
+      >
+        <span class="visual-notes-label" data-i18n="creativity">{creativity.title["zh-Hans"]}</span>
+        <span class="creativity-subtitle" data-i18n="creativityAriaLabel">{creativity.ariaLabel["zh-Hans"]}</span>
+        <div class="creativity-marquee" data-carousel-mode={creativity.carouselMode} role="group" tabindex="0" aria-label={creativity.ariaLabel["zh-Hans"]} data-i18n-aria="creativityAriaLabel">
+          {creativityRows.map((items, row) => (
+            <div class:list={["creativity-track", "creativity-track-row", row === 1 && "creativity-track-reverse"]}>
+              <div class="creativity-track-loop">
+                <CreativityLogoSet items={items} />
+                <CreativityLogoSet items={items} hidden />
+                {creativity.carouselMode === "diagonal" && <CreativityLogoSet items={items} hidden />}
+                {creativity.carouselMode === "diagonal" && <CreativityLogoSet items={items} hidden />}
+                {creativity.carouselMode === "marquee" && <CreativityLogoSet items={items} hidden />}
+                {creativity.carouselMode === "marquee" && <CreativityLogoSet items={items} hidden />}
+              </div>
+            </div>
+          ))}
+          <div class="creativity-track creativity-track-single">
+            <CreativityLogoSet items={creativityItems} />
+            <CreativityLogoSet items={creativityItems} hidden />
+          </div>
+        </div>
+        <div class:list={["creativity-mobile-marquee", creativityRows.length === 1 && "single-row"]} role="group" tabindex="0" aria-label={creativity.ariaLabel["zh-Hans"]} data-i18n-aria="creativityAriaLabel">
+          {creativityRows.map((items, row) => (
+            <div class:list={["creativity-mobile-track", row === 1 && "creativity-mobile-track-reverse"]}>
+              <CreativityLogoSet items={items} />
+              <CreativityLogoSet items={items} hidden />
+            </div>
+          ))}
+        </div>
+        {creativity.url && (
+          <a
+            class="visual-creativity-more"
+            href={withBase(creativity.url)}
+            target={creativityIsExternal ? "_blank" : undefined}
+            rel={creativityIsExternal ? "noopener noreferrer" : undefined}
+          >
+            <span data-i18n="learnMore">了解详细</span>
+            <svg class="visual-creativity-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7 17 17 7M8 7h9v9" />
+            </svg>
+          </a>
+        )}
+      </div>}
+      {feature.visible && <a
+        class:list={["visual-feature", !feature.showOnMobile && "home-card-mobile-hidden"]}
+        href={feature.url ? withBase(feature.url) : undefined}
+        target={featureIsExternal ? "_blank" : undefined}
+        rel={featureIsExternal ? "noopener noreferrer" : undefined}
+        style={`--feature-background-image: ${feature.backgroundImage ? `url("${withBase(feature.backgroundImage)}")` : "none"}`}
+      >
+        <div class="feature-mark" aria-hidden="true">
+          <img class="feature-play" src={withBase(feature.playLogoImage)} alt="" width="591" height="414" />
+        </div>
+        <div class="feature-copy">
+          <strong class="feature-title">{feature.title}</strong>
+          <span class="feature-subtitle" data-i18n="featureSubtitle">{feature.subtitle["zh-Hans"]}</span>
+        </div>
+      </a>}
+    </section>
+    <div class:list={["home-grid", !profile.visible && "home-grid-without-profile"]}>
+      <section>
+        <div class="post-controls">
+          <div class="category-filter">
+            <button class="active" type="button" data-home-filter="all">
+              <span data-i18n="all">{content.ui.translations["zh-Hans"].all}</span>
+            </button>
+            <button type="button" data-home-filter="month">
+              <span data-i18n="thisMonth">{content.ui.translations["zh-Hans"].thisMonth}</span>
+            </button>
+            <button type="button" data-home-filter="popular">
+              <span data-i18n="popular">{content.ui.translations["zh-Hans"].popular}</span>
+            </button>
+          </div>
+          <div class="view-toggle">
+            <button class="active" data-view="list">
+              <span data-i18n="list">List</span>
+            </button>
+            <button data-view="grid"><span data-i18n="grid">Grid</span></button>
+          </div>
+        </div>
+        {posts.length > 0 ? <div class="post-list" data-post-list>
+          {posts.map((post, index) => (
+            <PostCard post={post} posts={posts} hidden={index >= 6} />
+          ))}
+        </div> : <div class="post-empty" role="status">
+          <span class="post-empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M13 7.5h14l9 9v23H13a3 3 0 0 1-3-3v-26a3 3 0 0 1 3-3Z" />
+              <path d="M27 8v9h9M17 26h14M17 32h10" />
+            </svg>
+          </span>
+          <strong data-i18n="noPosts">暂时还没有文章。</strong>
+          <span data-i18n="noPostsDescription">新的内容正在准备中，欢迎稍后再来。</span>
+        </div>}
+        {posts.length > 0 && <nav class="post-pagination" aria-label="文章分页" data-i18n-aria="pagination" data-post-pagination>
+          <button class="pagination-step" type="button" data-pagination-prev data-i18n="previousPage" disabled>上一页</button>
+          <div class="pagination-control" data-pagination-control>
+            <span class="pagination-pages" data-pagination-pages></span>
+          </div>
+          <button class="pagination-step" type="button" data-pagination-next data-i18n="nextPage" disabled={posts.length <= 6}>下一页</button>
+          <span class="pagination-status" aria-live="polite" data-pagination-status>第 1 / {Math.ceil(posts.length / 6)} 页</span>
+        </nav>}
+      </section>
+      {profile.visible && <aside class:list={["sidebar", !profile.showOnMobile && "home-card-mobile-hidden"]}>
+        <div class="profile-card">
+          <div class="profile-avatar">
+            <img src={withBase(profile.avatarImage)} alt="" />
+          </div>
+          <strong class="profile-name">{profile.name}</strong>
+          <span class="profile-description" data-i18n="profile">{profile.description["zh-Hans"]}</span>
+          {profile.links.length > 0 && (
+            <div class="profile-links">
+              {profile.links.map((link) => {
+                const external = /^https?:\/\//i.test(link.href);
+                return (
+                  <a href={withBase(link.href)} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} aria-label={link.label}>
+                    <img src={withBase(link.icon)} alt="" />
+                    <span>{link.label}</span>
+                  </a>
+                );
+              })}
+            </div>
+          )}
+          <div class="profile-stats" aria-label="站点统计" data-i18n-aria="profileStats">
+            <div class="profile-stat profile-stat-wide">
+              <strong data-site-days data-established-at={content.site.establishedAt}>{getDaysOnline(new Date())}</strong>
+              <span data-i18n="siteDays">建站天数</span>
+            </div>
+            <div class="profile-stat">
+              <strong>{sitePosts.length}</strong>
+              <span data-i18n="sitePosts">文章总数</span>
+            </div>
+            <div class="profile-stat">
+              <strong>{totalWords.toLocaleString("zh-CN")}</strong>
+              <span data-i18n="siteWords">全站字数</span>
+            </div>
+          </div>
+        </div>
+      </aside>}
+    </div>
+  </div>
+  <script is:inline data-astro-rerun>
+    (() => {
+    window.homePageController?.abort();
+    const controller = new AbortController();
+    window.homePageController = controller;
+    const listenerOptions = { signal: controller.signal };
+    const creativityCard = document.querySelector(".visual-creativity[data-creativity-url]");
+    document.addEventListener("pointerdown", (event) => {
+      if (
+        !creativityCard ||
+        !window.matchMedia("(hover: none), (pointer: coarse)").matches ||
+        !(event.target instanceof Element)
+      ) return;
+      if (creativityCard.contains(event.target)) return;
+      delete creativityCard.dataset.touchRevealed;
+      delete creativityCard.dataset.touchCtaActive;
+    }, { ...listenerOptions, capture: true });
+    creativityCard?.addEventListener("click", (event) => {
+      if (window.matchMedia("(hover: none), (pointer: coarse)").matches) {
+        const clickedLink = event.target instanceof Element &&
+          event.target.closest(".visual-creativity-more");
+        if (creativityCard.dataset.touchRevealed !== "true") {
+          creativityCard.dataset.touchRevealed = "true";
+          if (clickedLink) {
+            creativityCard.dataset.touchCtaActive = "true";
+            event.preventDefault();
+          }
+          return;
+        }
+        if (clickedLink) {
+          creativityCard.dataset.touchCtaActive = "true";
+          return;
+        }
+        delete creativityCard.dataset.touchRevealed;
+        delete creativityCard.dataset.touchCtaActive;
+      }
+    }, listenerOptions);
+    const siteDaysElement = document.querySelector("[data-site-days]");
+    if (siteDaysElement instanceof HTMLElement) {
+      const establishedAt = new Date(`${siteDaysElement.dataset.establishedAt}T00:00:00Z`);
+      const now = new Date();
+      const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+      const daysOnline = Math.max(1, Math.floor((today - establishedAt.getTime()) / 86_400_000) + 1);
+      siteDaysElement.textContent = daysOnline.toLocaleString(document.documentElement.lang);
+    }
+    const postList = document.querySelector("[data-post-list]");
+    const pagination = document.querySelector("[data-post-pagination]");
+    const paginationControl = document.querySelector("[data-pagination-control]");
+    const paginationStatus = document.querySelector("[data-pagination-status]");
+    const paginationPages = document.querySelector("[data-pagination-pages]");
+    const previousPageButton = document.querySelector("[data-pagination-prev]");
+    const nextPageButton = document.querySelector("[data-pagination-next]");
+    const pageSize = 6;
+    const viewButtons = [...document.querySelectorAll("[data-view]")];
+    const controlInteractionRoot = document.querySelector(".home-grid > section");
+    const pillGroups = [...document.querySelectorAll(".category-filter, .view-toggle, .pagination-control")];
+    const updatePillIndicator = (group) => {
+      const active = group.querySelector("button.active");
+      if (!(active instanceof HTMLElement)) return;
+      const groupRect = group.getBoundingClientRect();
+      const activeRect = active.getBoundingClientRect();
+      group.style.setProperty("--pill-x", `${activeRect.left - groupRect.left}px`);
+      group.style.setProperty(
+        "--pill-y",
+        `${activeRect.top - groupRect.top - (group.matches(".pagination-control") ? 7 : 2)}px`,
+      );
+      group.style.setProperty("--pill-width", `${activeRect.width}px`);
+      group.style.setProperty(
+        "--pill-height",
+        `${activeRect.height + (group.matches(".pagination-control") ? 8 : 0)}px`,
+      );
+    };
+    const updatePillIndicators = () => pillGroups.forEach(updatePillIndicator);
+    let postViewAnimationFrame = null;
+    let postViewAnimations = [];
+    const transitionPostView = (updateView) => {
+      if (postViewAnimationFrame !== null) {
+        cancelAnimationFrame(postViewAnimationFrame);
+        postViewAnimationFrame = null;
+      }
+      postViewAnimations.forEach((animation) => animation.cancel());
+      postViewAnimations = [];
+      if (!postList || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        updateView();
+        return;
+      }
+
+      const cards = [...postList.querySelectorAll(".post-card:not([hidden])")]
+        .filter((card) => card instanceof HTMLElement);
+      const previousRects = cards.map((card) => card.getBoundingClientRect());
+      updateView();
+      postViewAnimationFrame = requestAnimationFrame(() => {
+        postViewAnimationFrame = null;
+        cards.forEach((card, index) => {
+          if (!card.isConnected || card.hidden) return;
+          const previous = previousRects[index];
+          const current = card.getBoundingClientRect();
+          if (!current.width || !current.height) return;
+          postViewAnimations.push(card.animate(
+            [
+              {
+                transform: `translate(${previous.left - current.left}px, ${previous.top - current.top}px) scale(${previous.width / current.width}, ${previous.height / current.height})`,
+                transformOrigin: "top left",
+              },
+              { transform: "none", transformOrigin: "top left" },
+            ],
+            { duration: 450, easing: "cubic-bezier(.2,.75,.25,1)" },
+          ));
+        });
+      });
+    };
+    let pillDrag = null;
+    let suppressNativeClick = false;
+    const getPillGroupAt = (clientX) => pillGroups
+      .filter((group) => getComputedStyle(group).display !== "none")
+      .reduce((nearest, group) => {
+        const rect = group.getBoundingClientRect();
+        const distance = clientX < rect.left
+          ? rect.left - clientX
+          : clientX > rect.right
+            ? clientX - rect.right
+            : 0;
+        return !nearest || distance < nearest.distance
+          ? { group, distance }
+          : nearest;
+      }, null)?.group;
+    const setPillPosition = (group, clientX, width, height) => {
+      const rect = group.getBoundingClientRect();
+      const buttons = [...group.querySelectorAll("button")];
+      const longPress = group.classList.contains("is-long-pressing");
+      const firstButtonRect = buttons[0]?.getBoundingClientRect();
+      const minX = longPress && firstButtonRect
+        ? firstButtonRect.left - rect.left + firstButtonRect.width / 2 - width / 2
+        : 0;
+      const maxX = group.clientWidth - width + (longPress ? 8 : 0);
+      const x = Math.max(minX, Math.min(maxX, clientX - rect.left - width / 2));
+      const y = (group.clientHeight - height) / 2 -
+        (group.matches(".pagination-control") ? 3 : 2);
+      group.style.setProperty("--pill-x", `${x}px`);
+      group.style.setProperty("--pill-y", `${y}px`);
+      group.style.setProperty("--pill-width", `${width}px`);
+      group.style.setProperty("--pill-height", `${height}px`);
+      return x;
+    };
+    const restorePillImmediately = (group) => {
+      group.classList.remove("is-dragging", "is-long-pressing");
+      group.classList.add("is-pill-resetting");
+      updatePillIndicator(group);
+      requestAnimationFrame(() => group.classList.remove("is-pill-resetting"));
+    };
+    const restorePillSmoothly = (group) => {
+      group.classList.remove("is-dragging", "is-long-pressing");
+      updatePillIndicator(group);
+    };
+    const movePillDrag = (drag, clientX) => {
+      const x = setPillPosition(drag.group, clientX, drag.width, drag.height);
+      const groupRect = drag.group.getBoundingClientRect();
+      const pillCenter = groupRect.left + x + drag.width / 2;
+      drag.target = [...drag.group.querySelectorAll("button")]
+        .find((button) => {
+          const rect = button.getBoundingClientRect();
+          return pillCenter >= rect.left && pillCenter <= rect.right;
+        }) ?? null;
+      return drag.target;
+    };
+    controlInteractionRoot?.addEventListener("pointerdown", (event) => {
+      if (!event.isPrimary || event.button !== 0) return;
+      if (event.target instanceof Element && event.target.closest("[data-pagination-prev], [data-pagination-next]")) return;
+      const button = event.target instanceof Element
+        ? event.target.closest("button")
+        : null;
+      const buttonGroup = button && pillGroups.find((item) => item.contains(button));
+      const targetGroup = event.target instanceof Element
+        ? event.target.closest(".category-filter, .view-toggle, .pagination-control")
+        : null;
+      const group = buttonGroup
+        ?? pillGroups.find((item) => item === targetGroup)
+        ?? getPillGroupAt(event.clientX);
+      if (!group) return;
+      const startButton = button instanceof HTMLButtonElement ? button : null;
+      const active = group.querySelector("button.active");
+      if (!(active instanceof HTMLElement)) return;
+      const paginationGroup = group.matches(".pagination-control");
+      pillDrag = {
+        pointerId: event.pointerId,
+        group,
+        target: null,
+        startButton,
+        startX: event.clientX,
+        startY: event.clientY,
+        width: paginationGroup
+          ? Math.min(group.clientWidth - 8, Math.max(active.offsetWidth + 40, 64))
+          : Math.max(active.offsetWidth + 40, 96),
+        height: paginationGroup
+          ? active.offsetHeight + 8
+          : Math.max(active.offsetHeight + 16, group.clientHeight + 10),
+        moved: false,
+        longPressActivated: false,
+      };
+      const drag = pillDrag;
+      drag.longPressTimer = window.setTimeout(() => {
+        if (pillDrag !== drag) return;
+        drag.longPressActivated = true;
+        drag.group.classList.add("is-long-pressing");
+        setPillPosition(drag.group, drag.startX, drag.width, drag.height);
+        (startButton ?? controlInteractionRoot).setPointerCapture(event.pointerId);
+      }, 450);
+    }, listenerOptions);
+    controlInteractionRoot?.addEventListener("pointermove", (event) => {
+      const drag = pillDrag;
+      if (!drag || drag.pointerId !== event.pointerId) return;
+      if (!drag.longPressActivated) {
+        if (Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) < 8) return;
+        window.clearTimeout(drag.longPressTimer);
+        pillDrag = null;
+        return;
+      }
+      if (!drag.moved && Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) < 8) return;
+      drag.moved = true;
+      drag.group.classList.add("is-dragging");
+      drag.target = movePillDrag(drag, event.clientX);
+    }, listenerOptions);
+    controlInteractionRoot?.addEventListener("pointerup", (event) => {
+      const drag = pillDrag;
+      if (!drag || drag.pointerId !== event.pointerId) return;
+      pillDrag = null;
+      window.clearTimeout(drag.longPressTimer);
+      if (!drag.longPressActivated) {
+        if (!drag.startButton) restorePillSmoothly(drag.group);
+        return;
+      }
+      if (drag.moved) {
+        const target = movePillDrag(drag, event.clientX);
+        if (target instanceof HTMLButtonElement) {
+          drag.group.classList.remove("is-dragging", "is-long-pressing");
+          suppressNativeClick = true;
+          target.click();
+          if (!drag.group.matches(".pagination-control")) {
+            updatePillIndicator(drag.group);
+          }
+          window.setTimeout(() => { suppressNativeClick = false; }, 0);
+        } else {
+          restorePillSmoothly(drag.group);
+        }
+      } else {
+        restorePillSmoothly(drag.group);
+      }
+    }, listenerOptions);
+    const cancelPillDrag = (event) => {
+      if (!pillDrag || pillDrag.pointerId !== event.pointerId) return;
+      const { group } = pillDrag;
+      const { longPressTimer, longPressActivated } = pillDrag;
+      pillDrag = null;
+      window.clearTimeout(longPressTimer);
+      if (longPressActivated) restorePillImmediately(group);
+    };
+    controlInteractionRoot?.addEventListener("pointercancel", cancelPillDrag, listenerOptions);
+    controlInteractionRoot?.addEventListener("lostpointercapture", cancelPillDrag, listenerOptions);
+    document.addEventListener("touchmove", (event) => {
+      if (pillDrag?.longPressActivated) event.preventDefault();
+    }, { ...listenerOptions, capture: true, passive: false });
+    controlInteractionRoot?.addEventListener("click", (event) => {
+      if (suppressNativeClick && event.detail !== 0) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        suppressNativeClick = false;
+        return;
+      }
+      if (event.target instanceof Element) {
+        const group = event.target.closest(".category-filter, .view-toggle, .pagination-control");
+        group?.classList.remove("is-pill-hidden");
+        const button = event.target.closest("button");
+        if (group instanceof HTMLElement && button instanceof HTMLButtonElement) {
+          group.classList.remove("is-dragging", "is-long-pressing");
+          if (button.classList.contains("active")) updatePillIndicator(group);
+        }
+      }
+    }, true);
+    controlInteractionRoot?.addEventListener("contextmenu", (event) => event.preventDefault(), listenerOptions);
+    const pillResizeObserver = new ResizeObserver(updatePillIndicators);
+    pillGroups.forEach((group) => pillResizeObserver.observe(group));
+    const mobileCarousels = [...document.querySelectorAll(".creativity-mobile-marquee")];
+    const updateMobileCarouselSizes = () => {
+      mobileCarousels.forEach((carousel) => {
+        const width = carousel.clientWidth;
+        if (width <= 0) return;
+        const tracks = [...carousel.querySelectorAll(".creativity-mobile-track")];
+        const firstSet = tracks[0]?.querySelector(".creativity-set:not([aria-hidden='true'])");
+        const itemCount = firstSet?.querySelectorAll(".creativity-logo").length ?? 0;
+        if (itemCount === 0) return;
+        const gap = 12;
+        const minimumSize = carousel.classList.contains("single-row") ? 110 : 74;
+        const logoSize = itemCount === 1
+          ? Math.min(160, width)
+          : Math.max(minimumSize, (width + 8 - gap * itemCount) / (itemCount - 1));
+        carousel.style.setProperty("--mobile-logo-size", `${logoSize}px`);
+        if (itemCount === 1) {
+          tracks.forEach((track) => {
+            track.style.animation = "none";
+            track.querySelector(".creativity-set[aria-hidden='true']")?.setAttribute("hidden", "");
+          });
+        }
+      });
+    };
+    const mobileCarouselResizeObserver = new ResizeObserver(updateMobileCarouselSizes);
+    mobileCarousels.forEach((carousel) => mobileCarouselResizeObserver.observe(carousel));
+    updateMobileCarouselSizes();
+    const savedView = localStorage.getItem("home-post-view");
+    const initialView = savedView === "grid" || savedView === "list" ? savedView : "list";
+    document.documentElement.dataset.homePostView = initialView;
+    let selectedFilter = "all";
+    const requestedPage = Number(new URL(window.location.href).searchParams.get("page"));
+    let currentPage = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
+    let categoryTransitionTimer;
+    let pageTransitionTimer;
+    const postCards = [...document.querySelectorAll(".post-card")];
+    const postGroups = new Map();
+    postCards.forEach((card) => {
+      const key = card.dataset.postTranslationGroup;
+      if (!postGroups.has(key)) postGroups.set(key, []);
+      postGroups.get(key).push(card);
+    });
+    let selectedLanguage = document.documentElement.dataset.language || "zh-Hans";
+    let selectedLanguageCards = new Set();
+    const updatePostLanguage = () => {
+      selectedLanguageCards = new Set();
+      postGroups.forEach((group) => {
+        const selected =
+          group.find((card) => card.dataset.postLanguage === selectedLanguage) ??
+          group.find((card) => card.dataset.postLanguage === "zh-Hans") ??
+          group.find((card) => card.dataset.postLanguage === "zh") ??
+          group[0];
+        if (selected) selectedLanguageCards.add(selected);
+      });
+    };
+    const matchesSelectedFilter = (card) => {
+      if (!selectedLanguageCards.has(card)) return false;
+      if (selectedFilter === "all") return true;
+      if (selectedFilter === "popular") return card.dataset.postPopular === "true";
+      const now = new Date();
+      const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+      return card.dataset.postDate?.startsWith(currentMonth) ?? false;
+    };
+    postList?.classList.toggle("grid", initialView === "grid");
+    viewButtons.forEach((button) => button.classList.toggle("active", button.dataset.view === initialView));
+    updatePillIndicators();
+    const renderPage = () => {
+      const matchingCards = postCards.filter(matchesSelectedFilter);
+      const pageCount = Math.ceil(matchingCards.length / pageSize);
+      currentPage = Math.min(Math.max(currentPage, 1), Math.max(pageCount, 1));
+      const pageUrl = new URL(window.location.href);
+      if (currentPage > 1) {
+        pageUrl.searchParams.set("page", String(currentPage));
+      } else {
+        pageUrl.searchParams.delete("page");
+      }
+      if (`${pageUrl.pathname}${pageUrl.search}${pageUrl.hash}` !==
+        `${window.location.pathname}${window.location.search}${window.location.hash}`) {
+        window.history.replaceState(window.history.state, "", pageUrl);
+      }
+      const firstCard = (currentPage - 1) * pageSize;
+      const visibleCards = new Set(matchingCards.slice(firstCard, firstCard + pageSize));
+      postCards.forEach((card) => {
+        card.hidden = !visibleCards.has(card);
+      });
+      const totalPages = Math.max(pageCount, 1);
+      const pageLabel = {
+        "zh-Hans": `第 ${currentPage} / ${totalPages} 页`,
+        "zh-Hant": `第 ${currentPage} / ${totalPages} 頁`,
+        en: `Page ${currentPage} of ${totalPages}`,
+        ja: `${totalPages} ページ中 ${currentPage} ページ目`,
+        ko: `${totalPages}페이지 중 ${currentPage}페이지`,
+      }[document.documentElement.lang] ?? `Page ${currentPage} of ${totalPages}`;
+      if (paginationStatus) paginationStatus.textContent = pageLabel;
+      if (previousPageButton instanceof HTMLButtonElement) {
+        previousPageButton.disabled = currentPage <= 1;
+      }
+      if (nextPageButton instanceof HTMLButtonElement) {
+        nextPageButton.disabled = currentPage >= pageCount;
+      }
+      if (pagination instanceof HTMLElement) pagination.hidden = pageCount <= 1;
+      if (paginationPages instanceof HTMLElement) {
+        const pageItems = pageCount <= 7
+          ? Array.from({ length: pageCount }, (_, index) => index + 1)
+          : currentPage <= 4
+            ? [1, 2, 3, 4, 5, "ellipsis", pageCount]
+            : currentPage >= pageCount - 3
+              ? [1, "ellipsis", pageCount - 4, pageCount - 3, pageCount - 2, pageCount - 1, pageCount]
+              : [1, "ellipsis", currentPage - 1, currentPage, currentPage + 1, "ellipsis", pageCount];
+        paginationPages.replaceChildren(...pageItems.map((page) => {
+          if (page === "ellipsis") {
+            const ellipsis = document.createElement("span");
+            ellipsis.className = "pagination-ellipsis";
+            ellipsis.textContent = "…";
+            ellipsis.setAttribute("aria-hidden", "true");
+            return ellipsis;
+          }
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "pagination-page";
+          button.dataset.paginationPage = String(page);
+          button.textContent = String(page);
+          button.setAttribute("aria-label", {
+            "zh-Hans": `第 ${page} 页`,
+            "zh-Hant": `第 ${page} 頁`,
+            en: `Page ${page}`,
+            ja: `${page}ページ目`,
+            ko: `${page}페이지`,
+          }[document.documentElement.lang] ?? `Page ${page}`);
+          if (page === currentPage) {
+            button.classList.add("active");
+            button.setAttribute("aria-current", "page");
+          }
+          return button;
+        }));
+        if (paginationControl instanceof HTMLElement) {
+          updatePillIndicator(paginationControl);
+          paginationControl.classList.add("is-ready");
+        }
+      }
+    };
+    updatePostLanguage();
+    renderPage();
+    document.addEventListener("click", (event) => {
+      if (!(event.target instanceof Element)) return;
+      const card = event.target.closest(".post-card");
+      if (!(card instanceof HTMLAnchorElement)) return;
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        (card.target && card.target !== "_self")
+      ) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      window.history.replaceState({
+        ...window.history.state,
+        scrollX: window.scrollX,
+        scrollY: window.scrollY,
+      }, "", window.location.href);
+      window.location.assign(card.href);
+    }, { ...listenerOptions, capture: true });
+    document.addEventListener("site-language-change", (event) => {
+      const nextLanguage = event.detail?.language || "zh-Hans";
+      if (nextLanguage === selectedLanguage) return;
+      selectedLanguage = nextLanguage;
+      updatePostLanguage();
+      currentPage = 1;
+      renderPage();
+    }, listenerOptions);
+    controller.signal.addEventListener("abort", () => {
+      window.clearTimeout(categoryTransitionTimer);
+      window.clearTimeout(pageTransitionTimer);
+      if (postViewAnimationFrame !== null) cancelAnimationFrame(postViewAnimationFrame);
+      postViewAnimations.forEach((animation) => animation.cancel());
+      pillResizeObserver.disconnect();
+      mobileCarouselResizeObserver.disconnect();
+    }, { once: true });
+
+    document.querySelectorAll("[data-view]").forEach((b) =>
+      b.addEventListener("click", () => {
+        if (b.classList.contains("active")) return;
+        if (window.matchMedia("(max-width: 760px)").matches) return;
+        const view = b.dataset.view === "grid" ? "grid" : "list";
+        transitionPostView(() => {
+          document
+            .querySelectorAll("[data-view]")
+            .forEach((item) => item.classList.toggle("active", item === b));
+          updatePillIndicators();
+          postList?.classList.toggle("grid", view === "grid");
+          document.documentElement.dataset.homePostView = view;
+          localStorage.setItem("home-post-view", view);
+        });
+      }, listenerOptions),
+    );
+    document.querySelectorAll("[data-home-filter]").forEach((button) =>
+      button.addEventListener("click", () => {
+        if (button.classList.contains("active")) return;
+        const updateActiveFilter = () => {
+          document
+            .querySelectorAll("[data-home-filter]")
+            .forEach((item) => item.classList.toggle("active", item === button));
+          updatePillIndicators();
+        };
+        updateActiveFilter();
+        selectedFilter = button.dataset.homeFilter ?? "all";
+        window.clearTimeout(categoryTransitionTimer);
+        window.clearTimeout(pageTransitionTimer);
+        postList?.classList.add("is-category-changing");
+        categoryTransitionTimer = window.setTimeout(() => {
+          currentPage = 1;
+          renderPage();
+          requestAnimationFrame(() => postList?.classList.remove("is-category-changing"));
+        }, 220);
+      }, listenerOptions),
+    );
+    const changePage = (direction) => {
+      const pageCount = Math.ceil(
+        postCards.filter(matchesSelectedFilter).length / pageSize,
+      );
+      const nextPage = Math.min(Math.max(currentPage + direction, 1), pageCount);
+      goToPage(nextPage);
+    };
+    const goToPage = (page) => {
+      if (page === currentPage) return;
+      currentPage = page;
+      postList?.classList.add("is-category-changing");
+      window.clearTimeout(pageTransitionTimer);
+      pageTransitionTimer = window.setTimeout(() => {
+        renderPage();
+        requestAnimationFrame(() => postList?.classList.remove("is-category-changing"));
+      }, 120);
+    };
+    previousPageButton?.addEventListener("click", () => changePage(-1), listenerOptions);
+    nextPageButton?.addEventListener("click", () => changePage(1), listenerOptions);
+    paginationPages?.addEventListener("click", (event) => {
+      if (!(event.target instanceof Element)) return;
+      const button = event.target.closest("[data-pagination-page]");
+      if (!(button instanceof HTMLButtonElement)) return;
+      const page = Number(button.dataset.paginationPage);
+      if (Number.isInteger(page) && page > 0) goToPage(page);
+    }, listenerOptions);
+    })();
+  </script>
+</BaseLayout>

@@ -1,0 +1,69 @@
+{
+  "pageTitle": {
+    "zh-Hans": "公益服务",
+    "zh-Hant": "公益服務",
+    "ja": "サービス",
+    "ko": "서비스",
+    "en": "Charity"
+  },
+  "pageSubtitle": {
+    "zh-Hans": "这里整理了我提供的实用服务，欢迎按需使用。",
+    "zh-Hant": "這裡整理了我提供的實用服務，歡迎依需求使用。",
+    "ja": "提供している便利なサービスをまとめました。用途に合わせてご利用ください。",
+    "ko": "제공 중인 유용한 서비스를 모았습니다. 필요에 따라 이용해 보세요.",
+    "en": "A collection of useful services I provide, available for you to explore."
+  },
+  "items": [
+    {
+      "title": {
+        "zh-Hans": "订阅转换",
+        "zh-Hant": "訂閱轉換",
+        "ja": "サブスクリプション変換",
+        "ko": "구독 변환",
+        "en": "Subscription Converter"
+      },
+      "subtitle": {
+        "zh-Hans": "Hooleeas 提供订阅转换服务，支持多种常见订阅格式互转，并可生成适配不同客户端的订阅链接。",
+        "zh-Hant": "Hooleeas 提供訂閱轉換服務，支援多種常見訂閱格式互轉，並可產生適用於不同用戶端的訂閱連結。",
+        "ja": "Hooleeas は一般的な複数の形式に対応したサブスクリプション変換サービスを提供し、各種クライアント向けのリンクを生成できます。",
+        "ko": "Hooleeas는 다양한 구독 형식 간 변환을 지원하며 여러 클라이언트에 맞는 구독 링크를 생성합니다.",
+        "en": "Hooleeas provides subscription conversion between common formats, generating links compatible with different clients."
+      },
+      "url": "https://sub.hooleeas.com"
+    },
+    {
+      "title": {
+        "zh-Hans": "E5 Renew X",
+        "zh-Hant": "E5 Renew X",
+        "ja": "E5 Renew X",
+        "ko": "E5 Renew X",
+        "en": "E5 Renew X"
+      },
+      "subtitle": {
+        "zh-Hans": "Hooleeas 提供 Microsoft E5 账号续签服务，支持使用 Microsoft 或 GitHub 登录。",
+        "zh-Hant": "Hooleeas 提供 Microsoft E5 帳號續期服務，支援使用 Microsoft 或 GitHub 登入。",
+        "ja": "Hooleeas は Microsoft E5 アカウントの更新サービスを提供しています。Microsoft または GitHub でログインできます。",
+        "ko": "Hooleeas는 Microsoft E5 계정 갱신 서비스를 제공하며 Microsoft 또는 GitHub 계정으로 로그인할 수 있습니다.",
+        "en": "Hooleeas provides Microsoft E5 account renewal, with sign-in available through Microsoft or GitHub."
+      },
+      "url": "https://renewx.opentime.uk"
+    },
+    {
+      "title": {
+        "zh-Hans": "临时邮箱",
+        "zh-Hant": "臨時郵箱",
+        "ja": "一時メール",
+        "ko": "임시 이메일",
+        "en": "Temporary Email"
+      },
+      "subtitle": {
+        "zh-Hans": "Hooleeas 提供临时邮箱服务，方便临时注册与接收验证码，减少公开个人邮箱地址。",
+        "zh-Hant": "Hooleeas 提供臨時郵箱服務，方便臨時註冊與接收驗證碼，減少公開個人電子郵件地址。",
+        "ja": "Hooleeas は、一時的な登録や認証コードの受信に便利なメールサービスを提供し、個人のメールアドレスの公開を減らします。",
+        "ko": "Hooleeas는 임시 가입과 인증 코드 수신에 사용할 수 있는 이메일 서비스를 제공해 개인 이메일 주소 노출을 줄여 줍니다.",
+        "en": "Hooleeas provides temporary email for short-term sign-ups and verification messages, helping keep your personal address private."
+      },
+      "url": "https://mail.opentime.uk"
+    }
+  ]
+}

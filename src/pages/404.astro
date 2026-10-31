@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/site-path";
+
+const pageTranslations = {
+  "zh-Hans": {
+    notFoundTitle: "页面未找到 · Hooleeas Blog",
+    notFoundHeading: "这里什么也没有",
+    notFoundDescription: "这个页面可能已经移动，或者地址输入有误。",
+    notFoundHome: "回到主页",
+  },
+  "zh-Hant": {
+    notFoundTitle: "找不到頁面 · Hooleeas Blog",
+    notFoundHeading: "這裡什麼也沒有",
+    notFoundDescription: "這個頁面可能已經移動，或是網址輸入有誤。",
+    notFoundHome: "回到首頁",
+  },
+  en: {
+    notFoundTitle: "Page not found · Hooleeas Blog",
+    notFoundHeading: "Nothing to see here",
+    notFoundDescription: "This page may have moved, or the address may be incorrect.",
+    notFoundHome: "Back to home",
+  },
+  ja: {
+    notFoundTitle: "ページが見つかりません · Hooleeas Blog",
+    notFoundHeading: "ページが見つかりません",
+    notFoundDescription: "ページが移動したか、URLに誤りがある可能性があります。",
+    notFoundHome: "ホームに戻る",
+  },
+  ko: {
+    notFoundTitle: "페이지를 찾을 수 없습니다 · Hooleeas Blog",
+    notFoundHeading: "페이지를 찾을 수 없습니다",
+    notFoundDescription: "페이지가 이동했거나 주소가 잘못 입력되었을 수 있습니다.",
+    notFoundHome: "홈으로 돌아가기",
+  },
+};
+---
+
+<BaseLayout
+  title="页面未找到 · Hooleeas Blog"
+  description="这个页面可能已经移动，或者地址输入有误。"
+  pageTranslations={pageTranslations}
+  titleTranslationKey="notFoundTitle"
+  pageType="not-found"
+>
+  <section class="container not-found" aria-labelledby="not-found-heading">
+    <div class="not-found-content">
+      <p class="not-found-code" aria-hidden="true">404</p>
+      <h1 id="not-found-heading" data-i18n="notFoundHeading">这里什么也没有</h1>
+      <p class="not-found-description" data-i18n="notFoundDescription">
+        这个页面可能已经移动，或者地址输入有误。
+      </p>
+      <a class="not-found-home" href={withBase("/")} data-i18n="notFoundHome">
+        回到主页
+        <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

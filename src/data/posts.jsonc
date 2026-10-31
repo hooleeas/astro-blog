@@ -1,0 +1,17 @@
+{
+  // 全站文章页面显示设置；true 为显示，false 为隐藏。
+  "articlePage": {
+    // 是否显示文章目录。
+    "showTableOfContents": true,
+    // 是否显示文章底部的分享卡片。
+    "showShareCard": true,
+    // 是否显示文章最底部的打赏卡片。
+    "showDonationCard": false,
+    // 二维码图片路径，相对于 public/；留空时显示占位框。
+    "donationQrCodes": {
+      "binance": "",
+      "wechat": "",
+      "alipay": ""
+    }
+  }
+}

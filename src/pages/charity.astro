@@ -1,0 +1,190 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import charityText from "../data/services.jsonc?raw";
+import { parseJsonc, type LocalizedText } from "../lib/parse-jsonc";
+import { withBase } from "../lib/site-path";
+
+type ServicesContent = {
+  pageTitle: LocalizedText;
+  pageSubtitle: LocalizedText;
+  items: {
+    title: LocalizedText;
+    subtitle: LocalizedText;
+    url: string;
+  }[];
+};
+
+const services = parseJsonc<ServicesContent>(
+  charityText,
+  "src/data/services.jsonc",
+);
+const isExternalUrl = (url: string) => /^https?:\/\//i.test(url);
+const pageTranslations = {
+  "zh-Hans": {
+    servicesPageTitle: services.pageTitle["zh-Hans"],
+    servicesPageSubtitle: services.pageSubtitle["zh-Hans"],
+    ...Object.fromEntries(services.items.flatMap((item, index) => [
+      [`serviceTitle${index}`, item.title["zh-Hans"]],
+      [`serviceSubtitle${index}`, item.subtitle["zh-Hans"]],
+    ])),
+  },
+  "zh-Hant": {
+    servicesPageTitle: services.pageTitle["zh-Hant"],
+    servicesPageSubtitle: services.pageSubtitle["zh-Hant"],
+    ...Object.fromEntries(services.items.flatMap((item, index) => [
+      [`serviceTitle${index}`, item.title["zh-Hant"]],
+      [`serviceSubtitle${index}`, item.subtitle["zh-Hant"]],
+    ])),
+  },
+  ja: {
+    servicesPageTitle: services.pageTitle.ja,
+    servicesPageSubtitle: services.pageSubtitle.ja,
+    ...Object.fromEntries(services.items.flatMap((item, index) => [
+      [`serviceTitle${index}`, item.title.ja],
+      [`serviceSubtitle${index}`, item.subtitle.ja],
+    ])),
+  },
+  ko: {
+    servicesPageTitle: services.pageTitle.ko,
+    servicesPageSubtitle: services.pageSubtitle.ko,
+    ...Object.fromEntries(services.items.flatMap((item, index) => [
+      [`serviceTitle${index}`, item.title.ko],
+      [`serviceSubtitle${index}`, item.subtitle.ko],
+    ])),
+  },
+  en: {
+    servicesPageTitle: services.pageTitle.en,
+    servicesPageSubtitle: services.pageSubtitle.en,
+    ...Object.fromEntries(services.items.flatMap((item, index) => [
+      [`serviceTitle${index}`, item.title.en],
+      [`serviceSubtitle${index}`, item.subtitle.en],
+    ])),
+  },
+};
+---
+
+<BaseLayout
+  title={services.pageTitle["zh-Hans"]}
+  description={services.pageSubtitle["zh-Hans"]}
+  image={withBase("/og/pages/charity.png?v=10")}
+  imageAlt={services.pageTitle["zh-Hans"]}
+  imageWidth={1800}
+  imageHeight={600}
+  pageTranslations={pageTranslations}
+  titleTranslationKey="servicesPageTitle"
+>
+  <main class="container services-page">
+    <header class="services-heading content-page-heading">
+      <h1 data-i18n="servicesPageTitle">{services.pageTitle["zh-Hans"]}</h1>
+      <p data-i18n="servicesPageSubtitle">{services.pageSubtitle["zh-Hans"]}</p>
+    </header>
+
+    <section class="services-list" aria-label={services.pageTitle["zh-Hans"]}>
+      {services.items.map((item, index) => (
+        <article class="service-item">
+          <div class="service-content">
+            <h2 data-i18n={`serviceTitle${index}`}>{item.title["zh-Hans"]}</h2>
+            <h3 data-i18n={`serviceSubtitle${index}`}>{item.subtitle["zh-Hans"]}</h3>
+          </div>
+          <a
+            class="service-link"
+            href={withBase(item.url)}
+            target={isExternalUrl(item.url) ? "_blank" : undefined}
+            rel={isExternalUrl(item.url) ? "noopener noreferrer" : undefined}
+          >
+            {item.url}
+          </a>
+        </article>
+      ))}
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .services-page {
+    padding-top: 28px;
+    padding-bottom: 96px;
+  }
+
+  .services-heading { margin-bottom: 28px; }
+
+  .services-list {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .service-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+  }
+
+  .service-content {
+    min-width: 0;
+  }
+
+  .service-content h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    letter-spacing: -0.03em;
+  }
+
+  .service-content h3 {
+    margin: 7px 0 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 550;
+    letter-spacing: 0;
+  }
+
+  .service-link {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    gap: 12px;
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 700;
+    white-space: nowrap;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.2s ease;
+  }
+
+  .service-link:hover {
+    color: var(--text);
+  }
+
+  @media (max-width: 680px) {
+    .services-page {
+      padding-top: 22px;
+      padding-bottom: 68px;
+    }
+
+    .services-heading {
+      margin-bottom: 26px;
+    }
+
+    .services-list { width: 100%; }
+    .service-item {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 18px;
+      padding: 20px;
+    }
+    .service-content {
+      min-width: 0;
+    }
+
+    .service-content h2 {
+      font-size: 1.08rem;
+    }
+  }
+</style>

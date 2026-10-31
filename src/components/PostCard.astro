@@ -1,0 +1,39 @@
+---
+import {
+  getPostLanguage,
+  getPostTranslationGroup,
+  getPostHref,
+} from "../lib/posts";
+import { withBase } from "../lib/site-path";
+const { post, posts, hidden = false } = Astro.props;
+const { data } = post;
+---
+
+<a
+  class="post-card"
+  href={withBase(getPostHref(post, posts))}
+  data-post-href={withBase(getPostHref(post, posts))}
+  data-post-translation-group={getPostTranslationGroup(post)}
+  data-post-language={getPostLanguage(post)}
+  data-post-category={data.category}
+  data-post-date={data.pubDate.toISOString().slice(0, 10)}
+  data-post-popular={data.popular}
+  hidden={hidden || undefined}
+>
+  <span class="post-cover" aria-hidden="true">
+    {data.cover
+      ? <img src={withBase(data.cover)} alt="" loading="lazy" decoding="async" />
+      : <span>封面图片</span>}
+  </span>
+  <span class="post-card-content">
+    <time class="post-date" datetime={data.pubDate.toISOString()}>
+      {data.pubDate.toISOString().slice(0, 10)}
+    </time>
+    <strong>{data.title}</strong>
+    <span class="post-description">{data.subtitle}</span>
+    <span class="post-card-taxonomy">
+      <span class="post-category">{data.category}</span>
+      {data.tags.map((tag: string) => <span class="post-tag">{tag}</span>)}
+    </span>
+  </span>
+</a>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const pageTitle = "页面标题";
+const pageSubtitle = "页面副标题";
+---
+
+<BaseLayout title={`${pageTitle} · Hooleeas Blog`} description={pageSubtitle}>
+  <div class="container content-page">
+    <header class="content-page-heading">
+      <h1>{pageTitle}</h1>
+      <p>{pageSubtitle}</p>
+    </header>
+  </div>
+</BaseLayout>

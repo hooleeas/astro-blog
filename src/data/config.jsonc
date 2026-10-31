@@ -1,0 +1,205 @@
+{
+  // 站点配置：名称、标题、说明和作者。
+  "site": {
+    "name": "Hooleeas",
+    "title": "Hooleeas Blog",
+    "description": "Notes on building, thinking, and keeping the internet a little simpler.",
+    "author": "Hooleeas",
+    // 默认以最早一篇公开文章日期作为建站天数起算日；有实际上线日期时可更新此值。
+    "establishedAt": "2026-10-06"
+  },
+
+  // “文A”语言选择器显示的语言；新增文章语言时，在此数组中添加对应代码和显示名称。
+  "languages": [
+    {"code": "zh-Hans", "label": "简体中文", "enabled": true},
+    {"code": "en", "label": "English", "enabled": true},
+    {"code": "ja", "label": "日本語", "enabled": true},
+    {"code": "ko", "label": "한국어", "enabled": true},
+    {"code": "zh-Hant", "label": "繁體中文", "enabled": true}
+  ],
+
+  // 顶部导航：href 是页面地址，label 是各语言显示文字，key 对应语言切换键。
+  "navigation": {
+    "homeLabel": {
+      "zh-Hans": "主页",
+      "zh-Hant": "首頁",
+      "ja": "ホーム",
+      "ko": "홈",
+      "en": "Home"
+    },
+    "items": [
+      {"href": "/archive", "key": "archive", "label": {"zh-Hans": "文章归档", "zh-Hant": "文章歸檔", "ja": "アーカイブ", "ko": "아카이브", "en": "Archive"}},
+      {"href": "/notes", "key": "notes", "label": {"zh-Hans": "随记", "zh-Hant": "隨記", "ja": "日々のメモ", "ko": "짧은 메모", "en": "Notes"}},
+      {"href": "/charity", "key": "services", "label": {"zh-Hans": "公益服务", "zh-Hant": "公益服務", "ja": "サービス", "ko": "서비스", "en": "Charity"}},
+      {"href": "/about", "key": "about", "label": {"zh-Hans": "关于", "zh-Hant": "關於", "ja": "このサイトについて", "ko": "소개", "en": "About"}}
+    ]
+  },
+
+  // Titles and subtitles displayed at the top of content pages.
+  "pages": {
+    "archive": {
+      "pageTitle": {
+        "zh-Hans": "文章归档",
+        "zh-Hant": "文章歸檔",
+        "ja": "記事アーカイブ",
+        "ko": "글 모아보기",
+        "en": "Archive"
+      },
+      "pageSubtitle": {
+        "zh-Hans": "按分类、标签浏览文章，或直接搜索关键词。",
+        "zh-Hant": "依分類、標籤瀏覽文章，或直接搜尋關鍵字。",
+        "ja": "カテゴリーやタグから記事を探したり、キーワードで検索したりできます。",
+        "ko": "카테고리와 태그로 글을 둘러보거나 키워드로 검색하세요.",
+        "en": "Browse by category or tag, or search for a keyword."
+      }
+    },
+    "notes": {
+      "pageTitle": {
+        "zh-Hans": "随记",
+        "zh-Hant": "隨記",
+        "ja": "日々のメモ",
+        "ko": "짧은 메모",
+        "en": "Notes"
+      },
+      "pageSubtitle": {
+        "zh-Hans": "想到什么，就记几句。",
+        "zh-Hant": "想到什麼，就記幾句。",
+        "ja": "思いついたことを、数行だけ書き留めます。",
+        "ko": "문득 떠오른 생각을 몇 줄로 남깁니다.",
+        "en": "A few lines for whatever comes to mind."
+      }
+    }
+  },
+
+  // 首页内容按页面上看到的卡片分组。
+  "home": {
+
+    // 首页技术 Logo 轮播。
+    "creativity": {
+      // visible 控制所有设备显示；showOnMobile 控制窄屏显示，需 visible 同时为 true。
+      "visible": false,
+      "showOnMobile": false,
+      // 首页技术轮播卡片底部 Learn more 长链接的跳转地址；留空时不显示链接。
+      "url": "/apple",
+      "title": {
+        "zh-Hans": "Apple 订阅",
+        "zh-Hant": "Apple 訂閱",
+        "ja": "Apple サブスクリプション",
+        "ko": "Apple 구독",
+        "en": "Apple Subscriptions"
+      },
+      "ariaLabel": {
+        "zh-Hans": "站长提供实惠Apple订阅共享服务",
+        "zh-Hant": "站長提供實惠的 Apple 訂閱共享服務",
+        "ja": "サイト管理者が提供するお得な Apple サブスクリプション共有サービス",
+        "ko": "사이트 운영자가 제공하는 합리적인 Apple 구독 공유 서비스",
+        "en": "Affordable Apple subscription sharing services offered by the site owner"
+      },
+      // 轮播方向："diagonal" 为斜向滚动，"marquee" 为横向滚动。
+      "carouselMode": "diagonal",
+      "items": [
+        {"name": "Java", "color": "#fff", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/26ba17ce013ecde9afc8b373e2fc0b9d_1804318147854602575.jpg", "href": ""},
+        {"name": "Docker", "color": "#57b6e6", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/544b2d982fd5c4ede6630b29d86f3cae_7350393908531420887.png", "href": ""},
+        {"name": "Photoshop", "color": "#4082c3", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/4ce1d081b9b37b06e3714bee95e58589_1613929877388832041.png", "href": ""},
+        {"name": "Node", "color": "#333", "labelColor": "#fff", "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.1.1/img/svg/node-logo.svg", "href": ""},
+        {"name": "Webpack", "color": "#2e3a41", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/32dc115fbfd1340f919f0234725c6fb4_4060605986539473613.png", "href": ""},
+        {"name": "Pinia", "color": "#fff", "labelColor": "#17191c", "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.0.8/img/svg/pinia-logo.svg", "href": ""},
+        {"name": "Python", "color": "#fff", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/02c9c621414cc2ca41035d809a4154be_7912546659792951301.png", "href": ""},
+        {"name": "Vite", "color": "#937df7", "labelColor": "#17191c", "icon": "https://npm.elemecdn.com/anzhiyu-blog@2.0.8/img/svg/vite-logo.svg", "href": ""},
+        {"name": "Flutter", "color": "#4499e4", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/b5aa93e0b61d8c9784cf76d14886ea46_4590392178423108088.png", "href": ""},
+        {"name": "Vue", "color": "#b8f0ae", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/cf23526f451784ff137f161b8fe18d5a_692393069314581413.png", "href": ""},
+        {"name": "React", "color": "#222", "labelColor": "#fff", "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K", "href": ""},
+        {"name": "CSS3", "color": "#2c51db", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/948767d87de7c5733b5f59b036d28b4b_3573026798828830876.png", "href": ""},
+        {"name": "JS", "color": "#f7cb4f", "labelColor": "#17191c", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/06216e7fddb6704b57cb89be309443f9_7269407781142156006.png", "href": ""},
+        {"name": "HTML", "color": "#e9572b", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/f774c401c8bc2707e1df1323bdc9e423_1926035231499717029.png", "href": ""},
+        {"name": "Git", "color": "#df5b40", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/07/29/125766904/fcc0dbbfe206b4436097a8362d64b558_6981541002497327189.webp", "href": ""},
+        {"name": "Apifox", "color": "#e65164", "labelColor": "#fff", "icon": "https://upload-bbs.miyoushe.com/upload/2025/08/02/125766904/b61bc7287d7f7f89bd30079c7f04360e_2465770520170903938.png", "href": ""}
+      ]
+    },
+
+    // YouTube 展示卡片内容；图片路径相对 public/，url 是点击跳转地址，留空时不启用链接；backgroundImage 留空时使用默认渐变背景。
+    "feature": {
+      // visible 控制所有设备显示；showOnMobile 控制窄屏显示，需 visible 同时为 true。
+      "visible": false,
+      "showOnMobile": false,
+      "backgroundImage": "",
+      "playLogoImage": "/images/icon_youtube.webp",
+      "url": "https://youtube.com",
+      "title": "Hooleeas YouTube",
+      "subtitle": {
+        "zh-Hans": "探索技术 创造可能",
+        "zh-Hant": "探索技術，創造可能",
+        "ja": "テクノロジーを探求し、新たな可能性を創造する",
+        "ko": "기술을 탐구하고 가능성을 만들다",
+        "en": "Explore technology and creative possibilities"
+      }
+    },
+
+    // 个人资料卡：头像图片可用外部网址或项目内路径；链接 href 可填外部网址或站内路径，icon 可填外部图片网址或项目内路径。
+    "profile": {
+      // visible 控制所有设备显示；showOnMobile 控制窄屏显示，需 visible 同时为 true。
+      "visible": false,
+      "showOnMobile": false,
+      "avatarImage": "/images/avatar.webp",
+      "name": "Hooleeas",
+      "description": {
+        "zh-Hans": "一名独立开发者，专注于技术探索与开源分享",
+        "zh-Hant": "一名獨立開發者，專注於技術探索與開源分享",
+        "ja": "技術の探求とオープンソースの共有に取り組む個人開発者",
+        "ko": "기술 탐구와 오픈 소스 공유에 집중하는 독립 개발자",
+        "en": "An independent developer focused on exploring technology and sharing open source"
+      },
+      "links": []
+    }
+  },
+
+  // 通用界面文字，不属于某一张首页卡片。
+  "ui": {
+    "translations": {
+      "zh-Hans": {
+        "all": "全部",
+        "thisMonth": "本月发布",
+        "popular": "热门文章",
+        "list": "列表",
+        "grid": "网格",
+        "learnMore": "了解详细"
+      },
+
+      "zh-Hant": {
+        "all": "全部",
+        "thisMonth": "本月發布",
+        "popular": "熱門文章",
+        "list": "列表",
+        "grid": "網格",
+        "learnMore": "了解詳情"
+      },
+
+      "ja": {
+        "all": "すべて",
+        "thisMonth": "今月の記事",
+        "popular": "人気の記事",
+        "list": "リスト",
+        "grid": "グリッド",
+        "learnMore": "詳しく見る"
+      },
+
+      "ko": {
+        "all": "전체",
+        "thisMonth": "이번 달",
+        "popular": "인기 글",
+        "list": "목록",
+        "grid": "그리드",
+        "learnMore": "자세히 보기"
+      },
+
+      "en": {
+        "all": "All",
+        "thisMonth": "This month",
+        "popular": "Popular",
+        "list": "List",
+        "grid": "Grid",
+        "learnMore": "Learn more"
+      }
+    }
+  }
+}
