@@ -2,7 +2,6 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import CreativityLogoSet from "../components/CreativityLogoSet.astro";
 import appleText from "../data/apple.jsonc?raw";
-import aboutText from "../data/about.jsonc?raw";
 import { parseJsonc, type LocalizedText } from "../lib/parse-jsonc";
 import { withBase } from "../lib/site-path";
 
@@ -12,6 +11,13 @@ const apple = parseJsonc<{
   servicesTitle: LocalizedText;
   plansTitle: LocalizedText;
   planTableHeadings: Record<keyof LocalizedText, [string, string, string]>;
+  carouselLogos: {
+    name: string;
+    color: string;
+    labelColor: string;
+    icon: string;
+    href: string;
+  }[];
   plans: {
     name: string;
     included: LocalizedText;
@@ -21,19 +27,11 @@ const apple = parseJsonc<{
   appleText,
   "src/data/apple.jsonc",
 );
-const about = parseJsonc<{
-  logos: {
-    name: string;
-    color: string;
-    labelColor: string;
-    icon: string;
-    href: string;
-  }[];
-}>(aboutText, "src/data/about.jsonc");
-const splitIndex = Math.ceil(about.logos.length / 2);
+const carouselLogos = apple.carouselLogos;
+const splitIndex = Math.ceil(carouselLogos.length / 2);
 const logoRows = [
-  { items: about.logos.slice(0, splitIndex), reverse: false },
-  { items: about.logos.slice(splitIndex), reverse: true },
+  { items: carouselLogos.slice(0, splitIndex), reverse: false },
+  { items: carouselLogos.slice(splitIndex), reverse: true },
 ];
 const pageTranslations = {
   "zh-Hans": {

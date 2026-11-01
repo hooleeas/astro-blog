@@ -85,7 +85,7 @@ const pushBuiltPages = (message) => {
       ["clone", "--branch", pagesBranch, "--single-branch", pagesRepository, siteDirectory],
     );
     for (const entry of readdirSync(siteDirectory)) {
-      if (entry !== ".git") {
+      if (entry !== ".git" && entry !== "img") {
         rmSync(path.join(siteDirectory, entry), { recursive: true, force: true });
       }
     }
