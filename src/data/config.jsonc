@@ -260,7 +260,7 @@
     "feature": {
       "visible": true,
       "showOnMobile": true,
-      "backgroundImage": "",
+      "backgroundImage": "https://astro-blog-admin.pages.dev/images/background_youtube.webp",
       "playLogoImage": "/images/icon_youtube.webp",
       "url": "https://youtube.com",
       "title": "Hooleeas YouTube",
