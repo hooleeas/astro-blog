@@ -289,38 +289,8 @@
     "articleFilters": {
       "thisMonth": true,
       "popular": true,
-      "categories": [
-        {
-          "label": {
-            "zh-Hans": "指南",
-            "en": "Guides",
-            "ja": "ガイド"
-          },
-          "category": {
-            "zh-Hans": "使用指南",
-            "en": "Guides",
-            "ja": "ガイド"
-          }
-        }
-      ],
-      "tags": [
-        {
-          "label": {
-            "zh-Hans": "Markdown 专题"
-          },
-          "tag": {
-            "zh-Hans": "Markdown"
-          }
-        },
-        {
-          "label": {
-            "zh-Hans": "不存在的"
-          },
-          "tag": {
-            "zh-Hans": "没有这个标签"
-          }
-        }
-      ]
+      "categories": [],
+      "tags": []
     }
   },
   "ui": {
