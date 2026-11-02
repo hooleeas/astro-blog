@@ -16,6 +16,7 @@ const { data } = post;
   data-post-translation-group={getPostTranslationGroup(post)}
   data-post-language={getPostLanguage(post)}
   data-post-category={data.category}
+  data-post-tags={JSON.stringify(data.tags ?? [])}
   data-post-date={data.pubDate.toISOString().slice(0, 10)}
   data-post-popular={data.popular}
   hidden={hidden || undefined}

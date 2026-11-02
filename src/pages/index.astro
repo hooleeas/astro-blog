@@ -20,6 +20,7 @@ const articleFilters = (content.home as any).articleFilters ?? {};
 const showMonthFilter = articleFilters.thisMonth !== false;
 const showPopularFilter = articleFilters.popular !== false;
 const categoryFilters: any[] = Array.isArray(articleFilters.categories) ? articleFilters.categories : [];
+const tagFilters: any[] = Array.isArray(articleFilters.tags) ? articleFilters.tags : [];
 const featureIsExternal = /^https?:\/\//i.test(feature.url);
 const creativityIsExternal = /^https?:\/\//i.test(creativity.url);
 const creativityItems = creativity.items;
@@ -151,8 +152,14 @@ const hasVisibleVisualCards = creativity.visible || feature.visible;
                 <span data-filter-label={index}>{item?.label?.["zh-Hans"] ?? ""}</span>
               </button>
             ))}
+            {tagFilters.map((item: any, index: number) => (
+              <button type="button" data-home-filter={`tag:${index}`}>
+                <span data-filter-tag-label={index}>{item?.label?.["zh-Hans"] ?? ""}</span>
+              </button>
+            ))}
           </div>
           <script type="application/json" id="home-category-filters" set:html={JSON.stringify(categoryFilters)} />
+          <script type="application/json" id="home-tag-filters" set:html={JSON.stringify(tagFilters)} />
           <div class="view-toggle">
             <button class="active" data-view="list">
               <span data-i18n="list">List</span>
@@ -545,15 +552,17 @@ const hasVisibleVisualCards = creativity.visible || feature.visible;
     });
     let selectedLanguage = document.documentElement.dataset.language || "zh-Hans";
     let selectedLanguageCards = new Set();
-    // 分类筛选条目（构建时由设置注入）：每项的 label/category 都是语言映射，按当前语言取
-    const categoryFilterItems = (() => {
+    // 分类/标签筛选条目（构建时由设置注入）：每项的 label 与筛选值都是语言映射，按当前语言取
+    const readFilterItems = (id) => {
       try {
-        const parsed = JSON.parse(document.getElementById("home-category-filters")?.textContent || "[]");
+        const parsed = JSON.parse(document.getElementById(id)?.textContent || "[]");
         return Array.isArray(parsed) ? parsed : [];
       } catch {
         return [];
       }
-    })();
+    };
+    const categoryFilterItems = readFilterItems("home-category-filters");
+    const tagFilterItems = readFilterItems("home-tag-filters");
     const localizedValue = (map) => {
       if (!map || typeof map !== "object") return "";
       return map[selectedLanguage] ?? map["zh-Hans"] ?? map.zh ?? Object.values(map)[0] ?? "";
@@ -561,6 +570,10 @@ const hasVisibleVisualCards = creativity.visible || feature.visible;
     const updateFilterLabels = () => {
       document.querySelectorAll("[data-filter-label]").forEach((span) => {
         const item = categoryFilterItems[Number(span.dataset.filterLabel)];
+        if (item) span.textContent = localizedValue(item.label);
+      });
+      document.querySelectorAll("[data-filter-tag-label]").forEach((span) => {
+        const item = tagFilterItems[Number(span.dataset.filterTagLabel)];
         if (item) span.textContent = localizedValue(item.label);
       });
     };
@@ -583,6 +596,17 @@ const hasVisibleVisualCards = creativity.visible || feature.visible;
         const item = categoryFilterItems[Number(selectedFilter.slice("category:".length))];
         const wanted = item ? localizedValue(item.category) : "";
         return wanted !== "" && card.dataset.postCategory === wanted;
+      }
+      if (selectedFilter.startsWith("tag:")) {
+        const item = tagFilterItems[Number(selectedFilter.slice("tag:".length))];
+        const wanted = item ? localizedValue(item.tag) : "";
+        if (wanted === "") return false;
+        try {
+          const tags = JSON.parse(card.dataset.postTags || "[]");
+          return Array.isArray(tags) && tags.includes(wanted);
+        } catch {
+          return false;
+        }
       }
       const now = new Date();
       const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
