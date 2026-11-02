@@ -23,11 +23,11 @@
         "en": "Subscription Converter"
       },
       "subtitle": {
-        "zh-Hans": "Hooleeas 提供订阅转换服务，支持多种常见订阅格式互转，并可生成适配不同客户端的订阅链接。",
-        "zh-Hant": "Hooleeas 提供訂閱轉換服務，支援多種常見訂閱格式互轉，並可產生適用於不同用戶端的訂閱連結。",
-        "ja": "Hooleeas は一般的な複数の形式に対応したサブスクリプション変換サービスを提供し、各種クライアント向けのリンクを生成できます。",
-        "ko": "Hooleeas는 다양한 구독 형식 간 변환을 지원하며 여러 클라이언트에 맞는 구독 링크를 생성합니다.",
-        "en": "Hooleeas provides subscription conversion between common formats, generating links compatible with different clients."
+        "zh-Hans": "Hooleeas 提供订阅转换服务，支持多种常见订阅格式互转，并可生成适配不同客户端的订阅链接。X",
+        "zh-Hant": "Hooleeas 提供订阅转换服务，支持多种常见订阅格式互转，并可生成适配不同客户端的订阅链接。X",
+        "ja": "Hooleeas 提供订阅转换服务，支持多种常见订阅格式互转，并可生成适配不同客户端的订阅链接。X",
+        "ko": "Hooleeas 提供订阅转换服务，支持多种常见订阅格式互转，并可生成适配不同客户端的订阅链接。X",
+        "en": "Hooleeas 提供订阅转换服务，支持多种常见订阅格式互转，并可生成适配不同客户端的订阅链接。X"
       },
       "url": "https://sub.hooleeas.com"
     },
