@@ -15,6 +15,11 @@ const posts: Post[] = (await getCollection("posts", ({ data }: Post) => !data.dr
 );
 assertUniquePostTranslations(posts);
 const { creativity, feature, profile } = content.home;
+// 主页文章筛选设置（后台「主页设置」里维护）：本月/热门可开关，分类可增删；缺省时两个内置筛选都开、无分类
+const articleFilters = (content.home as any).articleFilters ?? {};
+const showMonthFilter = articleFilters.thisMonth !== false;
+const showPopularFilter = articleFilters.popular !== false;
+const categoryFilters: any[] = Array.isArray(articleFilters.categories) ? articleFilters.categories : [];
 const featureIsExternal = /^https?:\/\//i.test(feature.url);
 const creativityIsExternal = /^https?:\/\//i.test(creativity.url);
 const creativityItems = creativity.items;
@@ -131,13 +136,23 @@ const hasVisibleVisualCards = creativity.visible || feature.visible;
             <button class="active" type="button" data-home-filter="all">
               <span data-i18n="all">{content.ui.translations["zh-Hans"].all}</span>
             </button>
-            <button type="button" data-home-filter="month">
-              <span data-i18n="thisMonth">{content.ui.translations["zh-Hans"].thisMonth}</span>
-            </button>
-            <button type="button" data-home-filter="popular">
-              <span data-i18n="popular">{content.ui.translations["zh-Hans"].popular}</span>
-            </button>
+            {showMonthFilter && (
+              <button type="button" data-home-filter="month">
+                <span data-i18n="thisMonth">{content.ui.translations["zh-Hans"].thisMonth}</span>
+              </button>
+            )}
+            {showPopularFilter && (
+              <button type="button" data-home-filter="popular">
+                <span data-i18n="popular">{content.ui.translations["zh-Hans"].popular}</span>
+              </button>
+            )}
+            {categoryFilters.map((item: any, index: number) => (
+              <button type="button" data-home-filter={`category:${index}`}>
+                <span data-filter-label={index}>{item?.label?.["zh-Hans"] ?? ""}</span>
+              </button>
+            ))}
           </div>
+          <script type="application/json" id="home-category-filters" set:html={JSON.stringify(categoryFilters)} />
           <div class="view-toggle">
             <button class="active" data-view="list">
               <span data-i18n="list">List</span>
@@ -530,6 +545,25 @@ const hasVisibleVisualCards = creativity.visible || feature.visible;
     });
     let selectedLanguage = document.documentElement.dataset.language || "zh-Hans";
     let selectedLanguageCards = new Set();
+    // 分类筛选条目（构建时由设置注入）：每项的 label/category 都是语言映射，按当前语言取
+    const categoryFilterItems = (() => {
+      try {
+        const parsed = JSON.parse(document.getElementById("home-category-filters")?.textContent || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    })();
+    const localizedValue = (map) => {
+      if (!map || typeof map !== "object") return "";
+      return map[selectedLanguage] ?? map["zh-Hans"] ?? map.zh ?? Object.values(map)[0] ?? "";
+    };
+    const updateFilterLabels = () => {
+      document.querySelectorAll("[data-filter-label]").forEach((span) => {
+        const item = categoryFilterItems[Number(span.dataset.filterLabel)];
+        if (item) span.textContent = localizedValue(item.label);
+      });
+    };
     const updatePostLanguage = () => {
       selectedLanguageCards = new Set();
       postGroups.forEach((group) => {
@@ -545,6 +579,11 @@ const hasVisibleVisualCards = creativity.visible || feature.visible;
       if (!selectedLanguageCards.has(card)) return false;
       if (selectedFilter === "all") return true;
       if (selectedFilter === "popular") return card.dataset.postPopular === "true";
+      if (selectedFilter.startsWith("category:")) {
+        const item = categoryFilterItems[Number(selectedFilter.slice("category:".length))];
+        const wanted = item ? localizedValue(item.category) : "";
+        return wanted !== "" && card.dataset.postCategory === wanted;
+      }
       const now = new Date();
       const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
       return card.dataset.postDate?.startsWith(currentMonth) ?? false;
@@ -628,6 +667,7 @@ const hasVisibleVisualCards = creativity.visible || feature.visible;
       }
     };
     updatePostLanguage();
+    updateFilterLabels();
     renderPage();
     document.addEventListener("click", (event) => {
       if (!(event.target instanceof Element)) return;
@@ -656,6 +696,7 @@ const hasVisibleVisualCards = creativity.visible || feature.visible;
       if (nextLanguage === selectedLanguage) return;
       selectedLanguage = nextLanguage;
       updatePostLanguage();
+      updateFilterLabels();
       currentPage = 1;
       renderPage();
     }, listenerOptions);
