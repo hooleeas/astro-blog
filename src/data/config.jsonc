@@ -287,8 +287,8 @@
       "links": []
     },
     "articleFilters": {
-      "thisMonth": true,
-      "popular": true,
+      "thisMonth": false,
+      "popular": false,
       "categories": [],
       "tags": []
     }
