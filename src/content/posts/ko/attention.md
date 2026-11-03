@@ -1,11 +1,14 @@
 ---
 title: 'Markdown 콘텐츠 예제: 제목부터 미디어까지'
 subtitle: '제목 단계, 텍스트 서식, 목록, 표, 코드와 미디어 등 글 템플릿에서 사용할 수 있는 형식을 소개합니다.'
-pubDate: 2026-10-31
-tags: ['Markdown', '글쓰기 가이드', '예제']
-category: '가이드'
-cover: ''
-translationKey: 'markdown-content-showcase'
+pubDate: '2026-10-31'
+tags:
+  - Markdown
+  - 글쓰기 가이드
+  - 예제
+category: 가이드
+cover: 'https://astro-blog-admin.pages.dev/demo/demo_attention.webp'
+translationKey: markdown-content-showcase
 draft: false
 popular: false
 ---
