@@ -126,7 +126,7 @@
     "creativity": {
       "visible": true,
       "showOnMobile": true,
-      "url": "/",
+      "url": "/404",
       "title": {
         "zh-Hans": "Apple 订阅",
         "zh-Hant": "Apple 訂閱",
@@ -262,7 +262,7 @@
       "showOnMobile": true,
       "backgroundImage": "https://astro-blog-admin.pages.dev/images/demo_background.webp",
       "playLogoImage": "/images/icon_youtube.webp",
-      "url": "/",
+      "url": "/404",
       "title": "Hooleeas YouTube",
       "subtitle": {
         "zh-Hans": "探索技术 创造可能",
