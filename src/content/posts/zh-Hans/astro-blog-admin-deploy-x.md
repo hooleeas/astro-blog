@@ -1,6 +1,8 @@
 ---
 title: 一套代码两个家：图床双存储与双平台部署
-subtitle: astro-blog-admin 同一份代码同时部署在 Cloudflare Pages 和 EdgeOne Pages 上；图床在两边各用自家存储，却给出一模一样的界面和链接规则。
+subtitle: >-
+  astro-blog-admin 同一份代码同时部署在 Cloudflare Pages 和 EdgeOne Pages
+  上；图床在两边各用自家存储，却给出一模一样的界面和链接规则。
 pubDate: '2026-11-03'
 tags:
   - Astro
