@@ -7,12 +7,17 @@ import {
   getPostLanguage,
   getPostHref,
   getPostTranslationGroup,
+  getSharedPostCover,
 } from "../lib/posts";
 import { withBase } from "../lib/site-path";
 
 type Post = CollectionEntry<"posts">;
 const posts: Post[] = (await getCollection("posts", ({ data }: Post) => !data.draft)).sort(
   (a: Post, b: Post) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+// 封面整篇文章共用一份：按文章预先算好共用封面（本语言没填时借同组其他语言的）
+const coverByPostId = new Map(
+  posts.map((post) => [post.id, getSharedPostCover(post, posts)]),
 );
 assertUniquePostTranslations(posts);
 const categories = [...new Set(posts.map((post) => post.data.category))].sort();
@@ -166,8 +171,8 @@ const pageTranslations = {
           data-search={`${post.data.title} ${post.data.subtitle} ${post.data.category} ${post.data.tags.join(" ")} ${post.body}`}
         >
           <div class="archive-cover" aria-hidden="true">
-            {post.data.cover
-              ? <img src={withBase(post.data.cover)} alt="" loading="lazy" decoding="async" />
+            {coverByPostId.get(post.id)
+              ? <img src={withBase(coverByPostId.get(post.id) ?? "")} alt="" loading="lazy" decoding="async" />
               : <span data-i18n="archiveCover">封面图片</span>}
           </div>
           <div class="archive-row-content">

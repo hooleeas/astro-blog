@@ -3,10 +3,12 @@ import {
   getPostLanguage,
   getPostTranslationGroup,
   getPostHref,
+  getSharedPostCover,
 } from "../lib/posts";
 import { withBase } from "../lib/site-path";
 const { post, posts, hidden = false } = Astro.props;
 const { data } = post;
+const cover = getSharedPostCover(post, posts);
 ---
 
 <a
@@ -22,8 +24,8 @@ const { data } = post;
   hidden={hidden || undefined}
 >
   <span class="post-cover" aria-hidden="true">
-    {data.cover
-      ? <img src={withBase(data.cover)} alt="" loading="lazy" decoding="async" />
+    {cover
+      ? <img src={withBase(cover)} alt="" loading="lazy" decoding="async" />
       : <span>封面图片</span>}
   </span>
   <span class="post-card-content">

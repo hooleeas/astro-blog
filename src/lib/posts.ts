@@ -45,6 +45,20 @@ export const getPostInLanguage = (posts: Post[], language: PostLanguage) =>
   posts.find((post) => getPostLanguage(post) === "zh") ??
   posts[0];
 
+export const getSharedPostCover = (post: Post, posts: Post[]) => {
+  // 封面整篇文章共用一份、不分语言：本语言没填就借同组其他语言的（优先简体中文版，与站内兜底顺序一致）
+  if (post.data.cover) return post.data.cover;
+  const group =
+    getPostGroups(posts).find((items) =>
+      items.some((item) => item.id === post.id),
+    ) ?? [];
+  return (
+    group.find((item) => getPostLanguage(item) === "zh-Hans")?.data.cover ??
+    group.find((item) => getPostLanguage(item) === "zh")?.data.cover ??
+    group.find((item) => item.data.cover)?.data.cover
+  );
+};
+
 export const getPostHref = (post: Post, posts: Post[]) => {
   const group = getPostGroups(posts).find((items) =>
     items.some((item) => item.id === post.id),

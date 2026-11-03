@@ -9,6 +9,7 @@ import {
   getPostHrefForLanguage,
   getPostLanguage,
   getPostsByLanguage,
+  getSharedPostCover,
   type Post,
 } from "../../lib/posts";
 import { siteContent } from "../../lib/parse-jsonc";
@@ -155,7 +156,7 @@ export async function getStaticPaths() {
         pubDate: defaultPost.data.pubDate.toISOString().slice(0, 10),
         category: defaultPost.data.category,
         tags: defaultPost.data.tags,
-        cover: defaultPost.data.cover,
+        cover: getSharedPostCover(defaultPost, posts),
         imageKind: "cover",
       } satisfies PreviewProps,
     };
@@ -171,7 +172,7 @@ export async function getStaticPaths() {
           pubDate: post.data.pubDate.toISOString().slice(0, 10),
           category: post.data.category,
           tags: post.data.tags,
-          cover: post.data.cover,
+          cover: getSharedPostCover(post, posts),
           imageKind: "cover",
         } satisfies PreviewProps,
       };

@@ -11,6 +11,7 @@ import {
   getPostLanguage,
   getPostHref,
   getPostGroups,
+  getSharedPostCover,
   type Post,
 } from "../lib/posts";
 
@@ -182,7 +183,8 @@ const localizedMetadata = Object.fromEntries(
   <div class="container">
     {renderedPosts.map(({ post, language, rendered }) => {
       const { Content, headings } = rendered;
-      const { title, subtitle, pubDate, tags, category, cover } = post.data;
+      const { title, subtitle, pubDate, tags, category } = post.data;
+      const cover = getSharedPostCover(post, posts);
       const articleTags: string[] = tags;
       const articleHeadings: { depth: number; slug: string; text: string }[] = headings;
       const dateLabel = pubDate.toISOString().slice(0, 10);
