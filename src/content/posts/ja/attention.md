@@ -1,11 +1,14 @@
 ---
-title: 'Markdownコンテンツ例：見出しからメディアまで'
-subtitle: '見出し、文字装飾、リスト、表、コード、メディアなど、記事テンプレートで使える書式を紹介します。'
-pubDate: 2026-10-31
-tags: ['Markdown', '文章作成', 'サンプル']
-category: 'ガイド'
-cover: ''
-translationKey: 'markdown-content-showcase'
+title: Markdownコンテンツ例：見出しからメディアまで
+subtitle: 見出し、文字装飾、リスト、表、コード、メディアなど、記事テンプレートで使える書式を紹介します。
+pubDate: '2026-10-31'
+tags:
+  - Markdown
+  - 文章作成
+  - サンプル
+category: ガイド
+cover: 'https://astro-blog-admin.pages.dev/demo/demo_attention.webp'
+translationKey: markdown-content-showcase
 draft: false
 popular: false
 ---
