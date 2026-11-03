@@ -14,7 +14,8 @@ import {
 } from "../../lib/posts";
 import { siteContent } from "../../lib/parse-jsonc";
 import aboutText from "../../data/about.jsonc?raw";
-import appleText from "../../data/apple.jsonc?raw";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import charityText from "../../data/services.jsonc?raw";
 import { parseJsonc, type LocalizedText } from "../../lib/parse-jsonc";
 
@@ -181,7 +182,10 @@ export async function getStaticPaths() {
   });
 
   const about = parseJsonc<PageContent>(aboutText, "src/data/about.jsonc");
-  const apple = parseJsonc<PageContent>(appleText, "src/data/apple.jsonc");
+  // apple 页面数据是可选的自用数据：文件不存在时跳过 /apple 的 OG 图，仓库照常构建
+  const appleFilePath = join(process.cwd(), "src/data/apple.jsonc");
+  const appleText = existsSync(appleFilePath) ? readFileSync(appleFilePath, "utf-8") : undefined;
+  const apple = appleText ? parseJsonc<PageContent>(appleText, "src/data/apple.jsonc") : null;
   const charity = parseJsonc<PageContent>(charityText, "src/data/services.jsonc");
   const homePosts = getPostsByLanguage(posts, "zh-Hans");
   const countWords = (markdown: string) => {
@@ -227,14 +231,18 @@ export async function getStaticPaths() {
         imageKind: "avatar",
       },
     },
-    {
-      params: { slug: "pages/apple" },
-      props: {
-        title: apple.pageTitle["zh-Hans"],
-        subtitle: apple.pageSubtitle?.["zh-Hans"],
-        imageKind: "icon",
-      },
-    },
+    ...(apple
+      ? [
+          {
+            params: { slug: "pages/apple" },
+            props: {
+              title: apple.pageTitle["zh-Hans"],
+              subtitle: apple.pageSubtitle?.["zh-Hans"],
+              imageKind: "icon" as const,
+            },
+          },
+        ]
+      : []),
     {
       params: { slug: "pages/archive" },
       props: {
@@ -293,11 +301,15 @@ export async function getStaticPaths() {
           subtitle: about.introduction?.detail[code],
           imageKind: "avatar",
         },
-        apple: {
-          title: apple.pageTitle[code],
-          subtitle: apple.pageSubtitle?.[code],
-          imageKind: "icon",
-        },
+        ...(apple
+          ? {
+              apple: {
+                title: apple.pageTitle[code],
+                subtitle: apple.pageSubtitle?.[code],
+                imageKind: "icon" as const,
+              },
+            }
+          : {}),
         archive: {
           title: siteContent.pages.archive.pageTitle[code],
           subtitle: siteContent.pages.archive.pageSubtitle[code],
