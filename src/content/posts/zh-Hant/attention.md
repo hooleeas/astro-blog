@@ -7,7 +7,7 @@ tags:
   - 寫作指南
   - 範例
 category: 使用指南
-cover: 'https://astro-blog-admin.pages.dev/demo/demo_attention.webp'
+cover: 'https://astro-blog-admin.pages.dev/images/demo_attention.webp'
 translationKey: markdown-content-showcase
 draft: false
 popular: false
