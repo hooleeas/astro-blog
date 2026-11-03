@@ -1,11 +1,16 @@
 ---
 title: 'Markdown Content Showcase: From Headings to Media'
-subtitle: 'A ready-to-preview article template demonstrating heading levels, text formatting, lists, tables, code, and media.'
-pubDate: 2026-10-31
-tags: ['Markdown', 'Writing guide', 'Example']
-category: 'Guides'
-cover: ''
-translationKey: 'markdown-content-showcase'
+subtitle: >-
+  A ready-to-preview article template demonstrating heading levels, text
+  formatting, lists, tables, code, and media.
+pubDate: '2026-10-31'
+tags:
+  - Markdown
+  - Writing guide
+  - Example
+category: Guides
+cover: 'https://astro-blog-admin.pages.dev/demo/demo_attention.webp'
+translationKey: markdown-content-showcase
 draft: false
 popular: false
 ---
