@@ -3143,6 +3143,15 @@ html[data-page-type="not-found"] body > main {
 .home-visual-single-card > .visual-feature {
   grid-column:1 / -1;
 }
+/* 单卡模式只剩 feature 卡时：高度与双卡模式的行高一致，
+   避免整宽再按 16:9 撑高（1320 宽会撑到 741px 把首屏吞掉），背景图 cover 居中裁切 */
+@media(min-width:761px) {
+  .home-visual-single-card > .visual-feature {
+    aspect-ratio:auto;
+    height:min(337.9275px,calc(25.875vw - 13.9725px));
+    align-self:start;
+  }
+}
 .home-grid-without-profile {
   grid-template-columns:minmax(0,1fr);
 }
