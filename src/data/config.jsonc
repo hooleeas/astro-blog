@@ -287,10 +287,76 @@
       "links": []
     },
     "articleFilters": {
-      "thisMonth": false,
-      "popular": false,
-      "categories": [],
-      "tags": []
+      "thisMonth": true,
+      "popular": true,
+      "categories": [
+        {
+          "label": {
+            "zh-Hans": "项目介绍",
+            "zh-Hant": "項目介紹",
+            "ja": "プロジェクト紹介",
+            "ko": "프로젝트 소개",
+            "en": "Projects"
+          },
+          "category": {
+            "zh-Hans": "项目介绍",
+            "zh-Hant": "項目介紹",
+            "ja": "プロジェクト紹介",
+            "ko": "프로젝트 소개",
+            "en": "Projects"
+          }
+        },
+        {
+          "label": {
+            "zh-Hans": "使用指南",
+            "zh-Hant": "使用指南",
+            "ja": "ガイド",
+            "ko": "가이드",
+            "en": "Guides"
+          },
+          "category": {
+            "zh-Hans": "使用指南",
+            "zh-Hant": "使用指南",
+            "ja": "ガイド",
+            "ko": "가이드",
+            "en": "Guides"
+          }
+        }
+      ],
+      "tags": [
+        {
+          "label": {
+            "zh-Hans": "Astro",
+            "zh-Hant": "Astro",
+            "ja": "Astro",
+            "ko": "Astro",
+            "en": "Astro"
+          },
+          "tag": {
+            "zh-Hans": "Astro",
+            "zh-Hant": "Astro",
+            "ja": "Astro",
+            "ko": "Astro",
+            "en": "Astro"
+          }
+        },
+        {
+          "label": {
+            "zh-Hans": "Markdown",
+            "zh-Hant": "Markdown",
+            "ja": "Markdown",
+            "ko": "Markdown",
+            "en": "Markdown"
+          },
+          "tag": {
+            "zh-Hans": "Markdown",
+            "zh-Hant": "Markdown",
+            "ja": "Markdown",
+            "ko": "Markdown",
+            "en": "Markdown"
+          }
+        }
+      ]
     }
   },
   "ui": {
