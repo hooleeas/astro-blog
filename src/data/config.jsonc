@@ -124,7 +124,7 @@
   },
   "home": {
     "creativity": {
-      "visible": true,
+      "visible": false,
       "showOnMobile": true,
       "url": "/",
       "title": {
