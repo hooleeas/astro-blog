@@ -1,11 +1,14 @@
 ---
-title: 'Markdown 內容範例：從標題到多媒體'
-subtitle: '這是一篇可直接預覽的文章範本，展示常見標題層級、文字格式、清單、表格、程式碼與多媒體內容。'
-pubDate: 2026-10-31
-tags: ['Markdown', '寫作指南', '範例']
-category: '使用指南'
-cover: ''
-translationKey: 'markdown-content-showcase'
+title: Markdown 內容範例：從標題到多媒體
+subtitle: 這是一篇可直接預覽的文章範本，展示常見標題層級、文字格式、清單、表格、程式碼與多媒體內容。
+pubDate: '2026-10-31'
+tags:
+  - Markdown
+  - 寫作指南
+  - 範例
+category: 使用指南
+cover: 'https://astro-blog-admin.pages.dev/demo/demo_attention.webp'
+translationKey: markdown-content-showcase
 draft: false
 popular: false
 ---
