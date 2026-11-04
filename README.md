@@ -4,7 +4,7 @@
 
 A multilingual static blog built with Astro. Write posts in Markdown and manage site copy and page content in JSONC files. Fork this project, replace the example content with your own, and deploy it to a static hosting provider.
 
-This blog's content is managed with **[astro-blog-admin](https://github.com/hooleeas/astro-blog-admin)** ([online admin](https://astro-blog-admin.pages.dev)) — a companion web console for editing the posts, notes, pages, and site settings stored in this repository, with a built-in image host.
+This blog's content is managed with **[astro-blog-admin](https://github.com/hooleeas/astro-blog-admin)** — a companion web console for editing the posts, notes, pages, and site settings stored in this repository, with a built-in image host.
 
 ## Features
 
