@@ -21,7 +21,6 @@ const siteTranslations = {
   "zh-Hans": {
     ...content.ui.translations["zh-Hans"],
     languagePicker: "选择语言",
-    footerAdmin: "管理后台：",
     themeToggle: "切换主题",
     openMobileMenu: "打开导航菜单",
     closeMobileMenu: "关闭导航菜单",
@@ -62,7 +61,6 @@ const siteTranslations = {
   "zh-Hant": {
     ...content.ui.translations["zh-Hant"],
     languagePicker: "選擇語言",
-    footerAdmin: "管理後台：",
     themeToggle: "切換主題",
     openMobileMenu: "開啟導覽選單",
     closeMobileMenu: "關閉導覽選單",
@@ -103,7 +101,6 @@ const siteTranslations = {
   ja: {
     ...content.ui.translations.ja,
     languagePicker: "言語を選択",
-    footerAdmin: "管理画面：",
     themeToggle: "テーマを切り替え",
     openMobileMenu: "ナビゲーションメニューを開く",
     closeMobileMenu: "ナビゲーションメニューを閉じる",
@@ -144,7 +141,6 @@ const siteTranslations = {
   ko: {
     ...content.ui.translations.ko,
     languagePicker: "언어 선택",
-    footerAdmin: "관리 화면:",
     themeToggle: "테마 전환",
     openMobileMenu: "탐색 메뉴 열기",
     closeMobileMenu: "탐색 메뉴 닫기",
@@ -185,7 +181,6 @@ const siteTranslations = {
   en: {
     ...content.ui.translations.en,
     languagePicker: "Select language",
-    footerAdmin: "Admin:",
     themeToggle: "Toggle theme",
     openMobileMenu: "Open navigation menu",
     closeMobileMenu: "Close navigation menu",
@@ -614,7 +609,6 @@ const translations = {
     <footer>
       <div class="container">
         © {new Date().getFullYear()} {site.name}
-        <span aria-hidden="true"> · </span><span data-i18n="footerAdmin">管理后台：</span><a href="https://astro-blog-admin.pages.dev/admin" target="_blank" rel="noopener">astro-blog-admin</a>
       </div>
     </footer>
     <script type="application/json" id="site-translations" set:html={JSON.stringify(translations)} />
